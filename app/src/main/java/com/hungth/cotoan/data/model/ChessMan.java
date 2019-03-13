@@ -3,40 +3,52 @@ package com.hungth.cotoan.data.model;
 import android.graphics.Bitmap;
 
 public class ChessMan {
-    private int mTypr;
-    private float mX;
-    private float mY;
+    private int mLeft;
+    private int mRight;
+    private int mTop;
+    private int mBottom;
     private Bitmap mBitmap;
+    private int mType;
 
-    public ChessMan(int mTypr, float mX, float mY, Bitmap mBitmap) {
-        this.mTypr = mTypr;
-        this.mX = mX;
-        this.mY = mY;
+    public ChessMan(int mLeft, int mRight, int mTop, int mBottom, Bitmap mBitmap, int mType) {
+        this.mLeft = mLeft;
+        this.mRight = mRight;
+        this.mTop = mTop;
+        this.mBottom = mBottom;
         this.mBitmap = mBitmap;
+        this.mType = mType;
     }
 
-    public int getmTypr() {
-        return mTypr;
+    public int getmLeft() {
+        return mLeft;
     }
 
-    public void setmTypr(int mTypr) {
-        this.mTypr = mTypr;
+    public void setmLeft(int mLeft) {
+        this.mLeft = mLeft;
     }
 
-    public float getmX() {
-        return mX;
+    public int getmRight() {
+        return mRight;
     }
 
-    public void setmX(float mX) {
-        this.mX = mX;
+    public void setmRight(int mRight) {
+        this.mRight = mRight;
     }
 
-    public float getmY() {
-        return mY;
+    public int getmTop() {
+        return mTop;
     }
 
-    public void setmY(float mY) {
-        this.mY = mY;
+    public void setmTop(int mTop) {
+        this.mTop = mTop;
+    }
+
+    public int getmBottom() {
+        return mBottom;
+    }
+
+    public void setmBottom(int mBottom) {
+        this.mBottom = mBottom;
     }
 
     public Bitmap getmBitmap() {
@@ -45,5 +57,13 @@ public class ChessMan {
 
     public void setmBitmap(Bitmap mBitmap) {
         this.mBitmap = mBitmap;
+    }
+
+    public int getmType() {
+        return mType;
+    }
+
+    public void setmType(int mType) {
+        this.mType = mType;
     }
 }
