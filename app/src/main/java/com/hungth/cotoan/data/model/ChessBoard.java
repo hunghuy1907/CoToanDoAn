@@ -1,30 +1,50 @@
 package com.hungth.cotoan.data.model;
 
 public class ChessBoard {
-    private float mX;
-    private float m;
+    private int left;
+    private int right;
+    private int top;
+    private int bottom;
     private boolean isEmpty;
 
-    public ChessBoard(float mX, float m, boolean isEmpty) {
-        this.mX = mX;
-        this.m = m;
+    public ChessBoard(int left, int right, int top, int bottom, boolean isEmpty) {
+        this.left = left;
+        this.right = right;
+        this.top = top;
+        this.bottom = bottom;
         this.isEmpty = isEmpty;
     }
 
-    public float getmX() {
-        return mX;
+    public int getLeft() {
+        return left;
     }
 
-    public void setmX(float mX) {
-        this.mX = mX;
+    public void setLeft(int left) {
+        this.left = left;
     }
 
-    public float getM() {
-        return m;
+    public int getRight() {
+        return right;
     }
 
-    public void setM(float m) {
-        this.m = m;
+    public void setRight(int right) {
+        this.right = right;
+    }
+
+    public int getTop() {
+        return top;
+    }
+
+    public void setTop(int top) {
+        this.top = top;
+    }
+
+    public int getBottom() {
+        return bottom;
+    }
+
+    public void setBottom(int bottom) {
+        this.bottom = bottom;
     }
 
     public boolean isEmpty() {
