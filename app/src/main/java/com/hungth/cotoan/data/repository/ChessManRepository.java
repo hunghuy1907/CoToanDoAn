@@ -1,5 +1,6 @@
 package com.hungth.cotoan.data.repository;
 
+import com.hungth.cotoan.data.model.ChessBoard;
 import com.hungth.cotoan.data.model.ChessMan;
 import com.hungth.cotoan.data.resource.local.ChessmanLocalDataSource;
 
@@ -31,5 +32,9 @@ public class ChessManRepository {
 
     public List<ChessMan> getChessmanBlues(int left, int right, int top, int bottom, int type) {
         return mChessmanLocalDataSource.getChessmanBlues(left, right, top, bottom, type);
+    }
+
+    public List<ChessBoard> getBoardChess(int left, int right, int top, int bottom, boolean isEmpty) {
+        return mChessmanLocalDataSource.getBoardChess(left, right, top, bottom, isEmpty);
     }
 }

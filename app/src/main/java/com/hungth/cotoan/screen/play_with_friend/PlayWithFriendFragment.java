@@ -2,13 +2,10 @@ package com.hungth.cotoan.screen.play_with_friend;
 
 import android.arch.lifecycle.Observer;
 import android.databinding.DataBindingUtil;
-import android.graphics.Canvas;
 import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +20,6 @@ import com.hungth.cotoan.databinding.FragmentPlayWithFriendBinding;
 import com.hungth.cotoan.screen.base.BaseFragment;
 import com.hungth.cotoan.utils.Constant;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PlayWithFriendFragment extends BaseFragment{
@@ -31,6 +27,7 @@ public class PlayWithFriendFragment extends BaseFragment{
     private FragmentPlayWithFriendBinding mBinding;
     private PlayWithFriendViewModel mViewModel;
     private int left, right, top, bottom;
+    private DrawView drawView;
 
     public static PlayWithFriendFragment getInstance() {
         return new PlayWithFriendFragment();
@@ -40,11 +37,13 @@ public class PlayWithFriendFragment extends BaseFragment{
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_play_with_friend, container, false);
+        drawView = new DrawView(getActivity());
+        mBinding.contrainLayoutBoard.addView(drawView);
         return mBinding.getRoot();
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mViewModel = new PlayWithFriendViewModel(ChessManRepository.getInstance(ChessmanLocalDataSource.getInstance(getActivity())));
         mBinding.setViewModel(mViewModel);
@@ -61,32 +60,22 @@ public class PlayWithFriendFragment extends BaseFragment{
                 top = imageView.getTop();
                 bottom = imageView.getBottom();
 
-//                System.out.println("------>>>left: " + left + ", right" + right + ", top: " + top + ", bottom: " + bottom);
-//                System.out.println("------>>>width: " + imageView.getWidth() + "height: " );
 
                 mViewModel.getChessmanBlues(left, right, top, bottom, 41).observe(getActivity(), new Observer<List<ChessMan>>() {
                     @Override
                     public void onChanged(@Nullable List<ChessMan> chessMEN) {
-                        drawChess(chessMEN);
+                       drawView.setChessManBlueList(chessMEN);
                     }
                 });
 
                 mViewModel.getChessmanReds(left, right, top, bottom, Constant.NUMBER).observe(getActivity(), new Observer<List<ChessMan>>() {
                     @Override
                     public void onChanged(@Nullable List<ChessMan> chessMEN) {
-                        drawChess(chessMEN);
+                        drawView.setchessManRedList(chessMEN);
                     }
+
                 });
             }
         });
-    }
-
-    public void drawChess(List<ChessMan> mChessmanReds) {
-        for (int i = 0; i < mChessmanReds.size(); i++) {
-            Canvas canvas = new Canvas();
-            ChessMan chessMan = mChessmanReds.get(i);
-            Rect rect = new Rect(chessMan.getmLeft(), chessMan.getmTop(), chessMan.getmRight(), chessMan.getmBottom());
-            canvas.drawBitmap(chessMan.getmBitmap(), null, rect, null);
-        }
     }
 }
