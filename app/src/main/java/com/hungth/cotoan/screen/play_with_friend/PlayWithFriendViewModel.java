@@ -2,6 +2,7 @@ package com.hungth.cotoan.screen.play_with_friend;
 
 import android.arch.lifecycle.MutableLiveData;
 
+import com.hungth.cotoan.data.model.ChessBoard;
 import com.hungth.cotoan.data.model.ChessMan;
 import com.hungth.cotoan.data.repository.ChessManRepository;
 import com.hungth.cotoan.screen.base.BaseViewModel;
@@ -13,6 +14,7 @@ public class PlayWithFriendViewModel extends BaseViewModel {
     private ChessManRepository mChessManRepository;
     private MutableLiveData<List<ChessMan>> mChessManRedMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<List<ChessMan>> mChessManBlueMutableLiveData = new MutableLiveData<>();
+    private MutableLiveData<List<ChessBoard>> mChessBoardMutableLiveData = new MutableLiveData<>();
 
     public PlayWithFriendViewModel(ChessManRepository mChessManRepository) {
         this.mChessManRepository = mChessManRepository;
@@ -47,6 +49,11 @@ public class PlayWithFriendViewModel extends BaseViewModel {
     public MutableLiveData<List<ChessMan>> getChessmanBlues(int left, int right, int top, int bottom, int type) {
         mChessManBlueMutableLiveData.setValue(mChessManRepository.getChessmanBlues(left, right, top, bottom, type));
         return mChessManBlueMutableLiveData;
+    }
+
+    public MutableLiveData<List<ChessBoard>> getChessboard(int left, int right, int top, int bottom, boolean isEmpty) {
+        mChessBoardMutableLiveData.setValue(mChessManRepository.getBoardChess(left, right, top, bottom, isEmpty));
+        return mChessBoardMutableLiveData;
     }
 
     @Override

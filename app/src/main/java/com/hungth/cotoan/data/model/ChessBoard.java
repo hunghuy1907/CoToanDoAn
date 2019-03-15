@@ -1,18 +1,22 @@
 package com.hungth.cotoan.data.model;
 
+import android.graphics.Bitmap;
+
 public class ChessBoard {
     private int left;
     private int right;
     private int top;
     private int bottom;
-    private boolean isEmpty;
+    private ChessMan chessMan;
+    private Bitmap bitmap;
 
-    public ChessBoard(int left, int right, int top, int bottom, boolean isEmpty) {
+    public ChessBoard(int left, int right, int top, int bottom, ChessMan chessMan, Bitmap bitmap) {
         this.left = left;
         this.right = right;
         this.top = top;
         this.bottom = bottom;
-        this.isEmpty = isEmpty;
+        this.chessMan = chessMan;
+        this.bitmap = bitmap;
     }
 
     public int getLeft() {
@@ -47,11 +51,19 @@ public class ChessBoard {
         this.bottom = bottom;
     }
 
-    public boolean isEmpty() {
-        return isEmpty;
+    public ChessMan getChessMan() {
+        return chessMan;
     }
 
-    public void setEmpty(boolean empty) {
-        isEmpty = empty;
+    public void setChessMan(ChessMan chessMan) {
+        this.chessMan = chessMan;
+    }
+
+    public Bitmap getBitmap() {
+        return bitmap;
+    }
+
+    public void setBitmap(Bitmap bitmap) {
+        this.bitmap = bitmap;
     }
 }
