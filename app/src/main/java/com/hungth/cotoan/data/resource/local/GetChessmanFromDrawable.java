@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import com.hungth.cotoan.R;
 import com.hungth.cotoan.data.model.ChessBoard;
 import com.hungth.cotoan.data.model.ChessMan;
+import com.hungth.cotoan.screen.play_with_friend.DrawView;
 import com.hungth.cotoan.utils.Constant;
 
 import java.util.ArrayList;
@@ -43,7 +44,6 @@ public class GetChessmanFromDrawable {
             R.drawable.so_xanh_9};
 
     public List<ChessMan> getChessmanRed(int left, int right, int top, int bottom, int type) {
-        System.out.println("---------->>> left + " + left + ", " + right + ", " + top + ", " + bottom);
         List<ChessMan> chessManReds = new ArrayList<>();
         for (int i = 0; i < CHESSMAN_BLUE_DOT.length; i++) {
             int leftChessman, rightChessman, topChessman, bottomChessman;
@@ -104,16 +104,24 @@ public class GetChessmanFromDrawable {
         int leftChessBoard, rightChessBoard, topChessboard, bottomChessboard;
         int cellVertical = (bottom - top) / 11;
         int cellHorizontal = (right - left) / 9;
-        for (int i = 0; i < 9; i++) {
-            for (int j = 0; j < 11; j++) {
-                leftChessBoard = left + cellHorizontal * i;
-                rightChessBoard = right - cellHorizontal * (9 - i - 1);
-                topChessboard = top + cellVertical * j;
-                bottomChessboard = bottom - cellVertical * (11 - j - 1);
-                chessBoards.add(new ChessBoard(leftChessBoard, rightChessBoard, topChessboard, bottomChessboard, true));
+        for (int i = 0; i < 11; i++) {
+            for (int j = 0; j < 9; j++) {
+                leftChessBoard = left + cellHorizontal * j;
+                rightChessBoard = right - cellHorizontal * (9 - j - 1);
+                topChessboard = top + cellVertical * i;
+                bottomChessboard = bottom - cellVertical * (11 - i - 1);
+                Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.guide_an_quan);
+                chessBoards.add(new ChessBoard(leftChessBoard, rightChessBoard, topChessboard, bottomChessboard, null, bitmap));
             }
         }
 
         return chessBoards;
+    }
+
+    private boolean checkIsEmpty(int leftBoard, int rightBoard, int topBoard, int bottomBoard, ChessMan chessMan) {
+        return  (chessMan.getmLeft() > leftBoard
+                && chessMan.getmRight() < rightBoard
+                && chessMan.getmTop() > topBoard
+                && chessMan.getmBottom() < bottomBoard);
     }
 }
