@@ -9,6 +9,7 @@ public class ChessBoard {
     private int bottom;
     private ChessMan chessMan;
     private Bitmap bitmap;
+    private boolean isClick;
 
     public ChessBoard(int left, int right, int top, int bottom, ChessMan chessMan, Bitmap bitmap) {
         this.left = left;
@@ -65,5 +66,13 @@ public class ChessBoard {
 
     public void setBitmap(Bitmap bitmap) {
         this.bitmap = bitmap;
+    }
+
+    public boolean isClick() {
+        return isClick;
+    }
+
+    public void setClick(boolean click) {
+        isClick = click;
     }
 }
