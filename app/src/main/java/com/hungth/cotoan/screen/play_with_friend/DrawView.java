@@ -28,8 +28,7 @@ public class DrawView extends View {
 
     private List<ChessBoard> chessBoardList;
     private ChessBoard chessBoardClick;
-    private boolean canGo;
-    private Stack<ChessBoard> stackChessBoards = new Stack<>();
+    private Stack<Integer> stackChessBoards = new Stack<>();
 
     public DrawView(Context context) {
         super(context);
@@ -93,7 +92,7 @@ public class DrawView extends View {
                         && xClick < chessBoard.getRight()
                         && yClick >= chessBoard.getTop()
                         && yClick < chessBoard.getBottom()) {
-                        stackChessBoards.push(chessBoard);
+                        stackChessBoards.push(i * 9 + j);
                     if (chessBoard.isClick()) {
                         chessBoard.setClick(false);
                     } else {
@@ -144,20 +143,16 @@ public class DrawView extends View {
     }
 
     private void moveChessman() {
-        ChessBoard chessBoard = stackChessBoards.get(0);
-        ChessBoard chessBoard1 = stackChessBoards.get(1);
-        if (chessBoard.getChessMan() != null && chessBoard1.getChessMan() == null) {
-            System.out.println("------>>> del ");
-            for (int i = 0; i < chessBoardList.size(); i++) {
-                if (chessBoardList.get(i).equals(chessBoard1)) {
-                    chessBoardList.get(i).setChessMan(chessBoard.getChessMan());
-                    System.out.println("------>>> draw " + i);
-                }
-                if (chessBoardList.get(i).equals(chessBoard)) {
-                    chessBoardList.get(i).setChessMan(null);
-                    System.out.println("------>>> delete " + i);
-                }
-            }
-        }
+        int number0 = stackChessBoards.get(0);
+        int number1 = stackChessBoards.get(1);
+        System.out.println("--->>> 0: " + number0 + ", 1: " + number1);
+        chessBoardList.get(number1).setChessMan(chessBoardList.get(number0).getChessMan());
+        chessBoardList.get(number0).setChessMan(null);
+//        if (chessBoardList.get(number0).getChessMan() != null
+//                && chessBoardList.get(number1).getChessMan() == null) {
+//            chessBoardList.get(number1).setChessMan(chessBoardList.get(number0).getChessMan());
+//            chessBoardList.get(number0).setChessMan(null);
+//        }
+        invalidate();
     }
 }
