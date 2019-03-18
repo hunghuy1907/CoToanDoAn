@@ -82,13 +82,11 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView{
                 drawView.setchessManRedList(chessMEN);
             }
         });
-    }
 
-    private void observerBoardchess(int left, int right, int top, int bottom) {
         mViewModel.getChessboard(left, right, top, bottom, true).observe(getActivity(), new Observer<List<ChessBoard>>() {
             @Override
             public void onChanged(@Nullable List<ChessBoard> chessBoards) {
-                drawView.setChessBoardList(chessBoards);
+                drawView.setChessBoardList(drawView.getChessManInChessBoard(chessBoards));
             }
         });
     }
@@ -96,6 +94,5 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView{
     @Override
     public void getLocation(int left, int right, int top, int bottom) {
         observeChessmans(left, right, top, bottom);
-        observerBoardchess(left, right, top, bottom);
     }
 }

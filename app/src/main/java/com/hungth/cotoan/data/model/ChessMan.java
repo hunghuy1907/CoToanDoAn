@@ -66,4 +66,17 @@ public class ChessMan {
     public void setmType(int mType) {
         this.mType = mType;
     }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null || getClass() != obj.getClass())
+            return false;
+        ChessMan chessMan = (ChessMan)obj;
+        return mLeft == chessMan.mLeft
+                && mRight == chessMan.mRight
+                && mTop == chessMan.mTop
+                && mBottom == chessMan.mBottom;
+    }
 }
