@@ -19,53 +19,32 @@ public class DrawView extends View {
     private List<ChessMan> chessManRedList;
     private List<ChessMan> chessManBlueList;
 
-    public List<ChessBoard> getChessBoardList() {
-        return chessBoardList;
-    }
-
     public void setChessBoardList(List<ChessBoard> chessBoardList) {
         this.chessBoardList = chessBoardList;
     }
 
     private List<ChessBoard> chessBoardList;
     private ChessBoard chessBoardClick;
-    private Stack<Integer> stackChessBoards = new Stack<>();
+    private List<Integer> stackChessBoards = new ArrayList<>();
 
     public DrawView(Context context) {
         super(context);
-    }
-
-    public List<ChessMan> getChessManBlueList() {
-        return chessManBlueList;
     }
 
     public void setChessManBlueList(List<ChessMan> chessManBlueList) {
         this.chessManBlueList = chessManBlueList;
     }
 
-    public List<ChessMan> getchessManRedList() {
-        return chessManRedList;
-    }
 
     public void setchessManRedList(List<ChessMan> chessManRedList) {
         this.chessManRedList = chessManRedList;
     }
 
-    public ChessBoard getChessBoardClick() {
-        return chessBoardClick;
-    }
-
-    public void setChessBoardClick(ChessBoard chessBoardClick) {
-        this.chessBoardClick = chessBoardClick;
-    }
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-//        drawGuideBoard(canvas);
-        getChessBoardList();
+        drawGuideBoard(canvas);
         drawChess(canvas);
-
     }
 
     public void drawChess(Canvas canvas) {
@@ -88,29 +67,6 @@ public class DrawView extends View {
         }
     }
 
-    public ChessBoard getBoardClickChessman(int xClick, int yClick) {
-        for (int i = 0; i < 11; i++) {
-            for (int j = 0; j < 9; j++) {
-                ChessBoard chessBoard = chessBoardList.get(i * 9 + j);
-                if (xClick >= chessBoard.getLeft()
-                        && xClick < chessBoard.getRight()
-                        && yClick >= chessBoard.getTop()
-                        && yClick < chessBoard.getBottom()) {
-                    stackChessBoards.push(i * 9 + j);
-                    if (chessBoard.isClick()) {
-                        chessBoard.setClick(false);
-                    } else {
-                        chessBoard.setClick(true);
-                    }
-                    if (chessBoard.isClick() && chessBoard.getChessMan() != null) {
-                        return chessBoard;
-                    }
-                }
-            }
-        }
-        return null;
-    }
-
     public ChessBoard getChessmanClicked(int xClick, int yClick) {
         for (int i = 0; i < chessBoardList.size(); i++) {
             ChessBoard chessBoard = chessBoardList.get(i);
@@ -118,7 +74,7 @@ public class DrawView extends View {
                     && xClick < chessBoard.getRight()
                     && yClick >= chessBoard.getTop()
                     && yClick < chessBoard.getBottom()) {
-                stackChessBoards.push(i);
+                stackChessBoards.add(i);
                 if (chessBoard.isClick()) {
                     chessBoard.setClick(false);
                 } else {
@@ -137,7 +93,7 @@ public class DrawView extends View {
             int xClick = (int) event.getX();
             int yClick = (int) event.getY();
             chessBoardClick = getChessmanClicked(xClick, yClick);
-            if (stackChessBoards.size() >= 2) {
+            if (isMove()) {
                 moveChessman();
             }
         }
@@ -167,8 +123,9 @@ public class DrawView extends View {
     }
 
     private void moveChessman() {
-        int numberNull = stackChessBoards.pop();
-        int numberChess = stackChessBoards.pop();
+        int numberNull = stackChessBoards.get(stackChessBoards.size() - 1);
+        int numberChess = stackChessBoards.get(stackChessBoards.size() - 2);
+        stackChessBoards.clear();
         if (chessBoardList.get(numberChess).getChessMan() != null
                 && chessBoardList.get(numberNull).getChessMan() == null) {
             Bitmap bitmap = chessBoardList.get(numberChess).getChessMan().getmBitmap();
@@ -176,12 +133,23 @@ public class DrawView extends View {
             ChessMan chessMan = getChessmanToMove(chessBoard, bitmap, 41);
             chessBoardList.get(numberNull).setChessMan(chessMan);
             chessBoardList.get(numberChess).setChessMan(null);
+            invalidate();
         }
-        invalidate();
     }
 
     public ChessMan getChessmanToMove(ChessBoard chessBoard, Bitmap bitmap, int type) {
         return new ChessMan(chessBoard.getLeft() + 8, chessBoard.getRight() - 8, chessBoard.getTop() + 4,
                 chessBoard.getBottom() - 4, bitmap, type);
     }
+
+    public boolean isMove() {
+        if (stackChessBoards.size() >= 2) {
+            ChessBoard chessBoard = chessBoardList.get(stackChessBoards.get(stackChessBoards.size() - 1));
+            if (chessBoard.getChessMan() == null) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }
