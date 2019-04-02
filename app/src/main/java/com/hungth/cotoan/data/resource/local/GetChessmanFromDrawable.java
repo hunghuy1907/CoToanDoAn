@@ -3,13 +3,10 @@ package com.hungth.cotoan.data.resource.local;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-
 import com.hungth.cotoan.R;
 import com.hungth.cotoan.data.model.ChessBoard;
 import com.hungth.cotoan.data.model.ChessMan;
-import com.hungth.cotoan.screen.play_with_friend.DrawView;
 import com.hungth.cotoan.utils.Constant;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,24 +21,27 @@ public class GetChessmanFromDrawable {
     public static final int[] CHESSMAN_RED_DOT = {
             R.drawable.cham_do_0, R.drawable.cham_do_1, R.drawable.cham_do_2, R.drawable.cham_do_3,
             R.drawable.cham_do_4, R.drawable.cham_do_5, R.drawable.cham_do_6, R.drawable.cham_do_7,
-            R.drawable.cham_do_8, R.drawable.cham_do_9};
+            R.drawable.cham_do_8, R.drawable.cham_do_9
+    };
 
     public static final int[] CHESSMAN_BLUE_DOT = {
             R.drawable.cham_xanh_0, R.drawable.cham_xanh_1, R.drawable.cham_xanh_2,
             R.drawable.cham_xanh_3, R.drawable.cham_xanh_4, R.drawable.cham_xanh_5,
             R.drawable.cham_xanh_6, R.drawable.cham_xanh_7, R.drawable.cham_xanh_8,
-            R.drawable.cham_xanh_9};
+            R.drawable.cham_xanh_9
+    };
 
     public static final int[] CHESSMAN_RED_NUMBER = {
             R.drawable.so_do_0, R.drawable.so_do_1, R.drawable.so_do_2, R.drawable.so_do_3,
             R.drawable.so_do_4, R.drawable.so_do_5, R.drawable.so_do_6, R.drawable.so_do_7,
-            R.drawable.so_do_8, R.drawable.so_do_9};
+            R.drawable.so_do_8, R.drawable.so_do_9
+    };
 
     public static final int[] CHESSMAN_BLUE_NUMBER = {
-            R.drawable.so_xanh_0, R.drawable.so_xanh_1, R.drawable.so_xanh_2,
-            R.drawable.so_xanh_3, R.drawable.so_xanh_4, R.drawable.so_xanh_5,
-            R.drawable.so_xanh_6, R.drawable.so_xanh_7, R.drawable.so_xanh_8,
-            R.drawable.so_xanh_9};
+            R.drawable.so_xanh_0, R.drawable.so_xanh_1, R.drawable.so_xanh_2, R.drawable.so_xanh_3,
+            R.drawable.so_xanh_4, R.drawable.so_xanh_5, R.drawable.so_xanh_6, R.drawable.so_xanh_7,
+            R.drawable.so_xanh_8, R.drawable.so_xanh_9
+    };
 
     public List<ChessMan> getChessmanRed(int left, int right, int top, int bottom, int type) {
         List<ChessMan> chessManReds = new ArrayList<>();
@@ -50,12 +50,12 @@ public class GetChessmanFromDrawable {
             Bitmap bitmap;
             if (i == 0) {
                 leftChessman = left + (right - left) / 9 * 4 + 8;
-                rightChessman = right - (right - left)/9 * 4 - 8;
+                rightChessman = right - (right - left) / 9 * 4 - 8;
                 topChessman = top + (bottom - top) / 11 + 4;
                 bottomChessman = top + (bottom - top) / 11 * 2 - 4;
             } else {
-                leftChessman = left + (right - left)/9 * (i - 1) + 8;
-                rightChessman = right - (right - left)/9 * (9 - i) - 8;
+                leftChessman = left + (right - left) / 9 * (i - 1) + 8;
+                rightChessman = right - (right - left) / 9 * (9 - i) - 8;
                 topChessman = top + 4;
                 bottomChessman = top + (bottom - top) / 11 - 4;
             }
@@ -63,9 +63,12 @@ public class GetChessmanFromDrawable {
             if (type == Constant.DOT) {
                 bitmap = BitmapFactory.decodeResource(mContext.getResources(), CHESSMAN_RED_DOT[i]);
             } else {
-                bitmap = BitmapFactory.decodeResource(mContext.getResources(), CHESSMAN_RED_NUMBER[i]);
+                bitmap = BitmapFactory.decodeResource(mContext.getResources(),
+                        CHESSMAN_RED_NUMBER[i]);
             }
-            chessManReds.add(new ChessMan(leftChessman, rightChessman, topChessman, bottomChessman, bitmap, type));
+            chessManReds.add(
+                    new ChessMan(leftChessman, rightChessman, topChessman, bottomChessman, bitmap,
+                            type, i));
         }
 
         return chessManReds;
@@ -78,22 +81,26 @@ public class GetChessmanFromDrawable {
             Bitmap bitmap;
             if (i == 0) {
                 leftChessman = left + (right - left) / 9 * 4 + 8;
-                rightChessman = right - (right - left)/9 * 4 - 8;
-                topChessman = top + (bottom - top)/11 * 9 + 4 ;
+                rightChessman = right - (right - left) / 9 * 4 - 8;
+                topChessman = top + (bottom - top) / 11 * 9 + 4;
                 bottomChessman = bottom - (bottom - top) / 11 - 4;
             } else {
-                leftChessman = left + (right - left)/9 * (i - 1) + 8;
-                rightChessman = right - (right - left)/9 * (9 - i) - 8;
+                leftChessman = left + (right - left) / 9 * (i - 1) + 8;
+                rightChessman = right - (right - left) / 9 * (9 - i) - 8;
                 bottomChessman = bottom - 4;
                 topChessman = bottom - (bottom - top) / 11 + 4;
             }
             if (type == Constant.DOT) {
-                bitmap = BitmapFactory.decodeResource(mContext.getResources(), CHESSMAN_BLUE_DOT[i]);
+                bitmap =
+                        BitmapFactory.decodeResource(mContext.getResources(), CHESSMAN_BLUE_DOT[i]);
             } else {
-                bitmap = BitmapFactory.decodeResource(mContext.getResources(), CHESSMAN_BLUE_NUMBER[i]);
+                bitmap = BitmapFactory.decodeResource(mContext.getResources(),
+                        CHESSMAN_BLUE_NUMBER[i]);
             }
 
-            chessManBlues.add(new ChessMan(leftChessman, rightChessman, topChessman, bottomChessman, bitmap, type));
+            chessManBlues.add(
+                    new ChessMan(leftChessman, rightChessman, topChessman, bottomChessman, bitmap,
+                            type, i));
         }
 
         return chessManBlues;
@@ -110,18 +117,13 @@ public class GetChessmanFromDrawable {
                 rightChessBoard = right - cellHorizontal * (9 - j - 1);
                 topChessboard = top + cellVertical * i;
                 bottomChessboard = bottom - cellVertical * (11 - i - 1);
-                Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(), R.drawable.guide_an_quan);
-                chessBoards.add(new ChessBoard(leftChessBoard, rightChessBoard, topChessboard, bottomChessboard, null, bitmap));
+                Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(),
+                        R.drawable.guide);
+                chessBoards.add(new ChessBoard(leftChessBoard, rightChessBoard, topChessboard,
+                        bottomChessboard, null, bitmap));
             }
         }
 
         return chessBoards;
-    }
-
-    private boolean checkIsEmpty(int leftBoard, int rightBoard, int topBoard, int bottomBoard, ChessMan chessMan) {
-        return  (chessMan.getmLeft() > leftBoard
-                && chessMan.getmRight() < rightBoard
-                && chessMan.getmTop() > topBoard
-                && chessMan.getmBottom() < bottomBoard);
     }
 }

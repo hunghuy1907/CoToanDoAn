@@ -9,14 +9,25 @@ public class ChessMan {
     private int mBottom;
     private Bitmap mBitmap;
     private int mType;
+    private int value;
 
-    public ChessMan(int mLeft, int mRight, int mTop, int mBottom, Bitmap mBitmap, int mType) {
+    public ChessMan(int mLeft, int mRight, int mTop, int mBottom, Bitmap mBitmap, int mType,
+            int value) {
         this.mLeft = mLeft;
         this.mRight = mRight;
         this.mTop = mTop;
         this.mBottom = mBottom;
         this.mBitmap = mBitmap;
         this.mType = mType;
+        this.value = value;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
     }
 
     public int getmLeft() {
