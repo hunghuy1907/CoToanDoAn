@@ -51,13 +51,13 @@ public class GetChessmanFromDrawable {
             if (i == 0) {
                 leftChessman = left + (right - left) / 9 * 4 + 8;
                 rightChessman = right - (right - left) / 9 * 4 - 8;
-                topChessman = top + (bottom - top) / 11 + 4;
-                bottomChessman = top + (bottom - top) / 11 * 2 - 4;
+                topChessman = top + (bottom - top) / 11 + 12;
+                bottomChessman = top + (bottom - top) / 11 * 2 - 6;
             } else {
                 leftChessman = left + (right - left) / 9 * (i - 1) + 8;
                 rightChessman = right - (right - left) / 9 * (9 - i) - 8;
-                topChessman = top + 4;
-                bottomChessman = top + (bottom - top) / 11 - 4;
+                topChessman = top + 8;
+                bottomChessman = top + (bottom - top) / 11 - 8;
             }
 
             if (type == Constant.DOT) {
@@ -82,13 +82,13 @@ public class GetChessmanFromDrawable {
             if (i == 0) {
                 leftChessman = left + (right - left) / 9 * 4 + 8;
                 rightChessman = right - (right - left) / 9 * 4 - 8;
-                topChessman = top + (bottom - top) / 11 * 9 + 4;
-                bottomChessman = bottom - (bottom - top) / 11 - 4;
+                topChessman = top + (bottom - top) / 11 * 9 + 10;
+                bottomChessman = bottom - (bottom - top) / 11 - 10;
             } else {
                 leftChessman = left + (right - left) / 9 * (i - 1) + 8;
                 rightChessman = right - (right - left) / 9 * (9 - i) - 8;
-                bottomChessman = bottom - 4;
-                topChessman = bottom - (bottom - top) / 11 + 4;
+                bottomChessman = bottom - 8;
+                topChessman = bottom - (bottom - top) / 11 + 8;
             }
             if (type == Constant.DOT) {
                 bitmap =
@@ -118,12 +118,11 @@ public class GetChessmanFromDrawable {
                 topChessboard = top + cellVertical * i;
                 bottomChessboard = bottom - cellVertical * (11 - i - 1);
                 Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(),
-                        R.drawable.guide);
+                        R.drawable.guide_60);
                 chessBoards.add(new ChessBoard(leftChessBoard, rightChessBoard, topChessboard,
                         bottomChessboard, null, bitmap));
             }
         }
-
         return chessBoards;
     }
 }
