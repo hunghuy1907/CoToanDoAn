@@ -6,13 +6,10 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.View;
-
 import com.hungth.cotoan.data.model.ChessBoard;
 import com.hungth.cotoan.data.model.ChessMan;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Stack;
 
 public class DrawView extends View {
 
@@ -35,7 +32,6 @@ public class DrawView extends View {
         this.chessManBlueList = chessManBlueList;
     }
 
-
     public void setchessManRedList(List<ChessMan> chessManRedList) {
         this.chessManRedList = chessManRedList;
     }
@@ -43,7 +39,7 @@ public class DrawView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        drawGuideBoard(canvas);
+        if (chessBoardClick != null) drawGuide(chessBoardClick.getChessMan().getValue(), canvas);
         drawChess(canvas);
     }
 
@@ -52,18 +48,10 @@ public class DrawView extends View {
         for (int i = 0; i < a; i++) {
             ChessMan chessMan = chessBoardList.get(i).getChessMan();
             if (chessMan != null) {
-                Rect rect = new Rect(chessMan.getmLeft(), chessMan.getmTop(),
-                        chessMan.getmRight(), chessMan.getmBottom());
+                Rect rect = new Rect(chessMan.getmLeft(), chessMan.getmTop(), chessMan.getmRight(),
+                         chessMan.getmBottom());
                 canvas.drawBitmap(chessMan.getmBitmap(), null, rect, null);
             }
-        }
-    }
-
-    public void drawGuideBoard(Canvas canvas) {
-        if (chessBoardClick != null) {
-            Rect rectBoard = new Rect(chessBoardClick.getLeft(), chessBoardClick.getTop(),
-                    chessBoardClick.getRight(), chessBoardClick.getBottom());
-            canvas.drawBitmap(chessBoardClick.getBitmap(), null, rectBoard, null);
         }
     }
 
@@ -80,8 +68,7 @@ public class DrawView extends View {
                 } else {
                     chessBoard.setClick(true);
                 }
-                if (chessBoard.getChessMan() != null)
-                    return chessBoard;
+                if (chessBoard.getChessMan() != null) return chessBoard;
             }
         }
         return null;
@@ -129,17 +116,18 @@ public class DrawView extends View {
         if (chessBoardList.get(numberChess).getChessMan() != null
                 && chessBoardList.get(numberNull).getChessMan() == null) {
             Bitmap bitmap = chessBoardList.get(numberChess).getChessMan().getmBitmap();
+            int value = chessBoardList.get(numberChess).getChessMan().getValue();
             ChessBoard chessBoard = chessBoardList.get(numberNull);
-            ChessMan chessMan = getChessmanToMove(chessBoard, bitmap, 41);
+            ChessMan chessMan = getChessmanToMove(chessBoard, bitmap, 41, value);
             chessBoardList.get(numberNull).setChessMan(chessMan);
             chessBoardList.get(numberChess).setChessMan(null);
             invalidate();
         }
     }
 
-    public ChessMan getChessmanToMove(ChessBoard chessBoard, Bitmap bitmap, int type) {
-        return new ChessMan(chessBoard.getLeft() + 8, chessBoard.getRight() - 8, chessBoard.getTop() + 4,
-                chessBoard.getBottom() - 4, bitmap, type);
+    public ChessMan getChessmanToMove(ChessBoard chessBoard, Bitmap bitmap, int type, int value) {
+        return new ChessMan(chessBoard.getLeft() + 8, chessBoard.getRight() - 8,
+                chessBoard.getTop() + 4, chessBoard.getBottom() - 4, bitmap, type, value);
     }
 
     public boolean isMove() {
@@ -152,4 +140,33 @@ public class DrawView extends View {
         return false;
     }
 
+    public void drawGuide(int value, Canvas canvas) {
+        for (int i = 1; i <= value; i++) {
+            for (int j = 0; j < chessBoardList.size(); j++) {
+                ChessBoard chessBoard = chessBoardList.get(j);
+                if (chessBoard.getChessMan() == null && value >= 1) {
+                    if (checkChessmanCanGo(chessBoard, i)) {
+                        Rect rectBoard = new Rect(chessBoard.getLeft() + 4, chessBoard.getTop() + 4,
+                                chessBoard.getRight() - 4, chessBoard.getBottom() - 4);
+                        canvas.drawBitmap(chessBoard.getBitmap(), null, rectBoard, null);
+                    }
+                }
+            }
+        }
+    }
+
+    public boolean checkChessmanCanGo(ChessBoard chessBoard, int value) {
+        float widthBase = chessBoardList.get(1).getLeft() - chessBoardList.get(0).getLeft();
+        float heightBase = chessBoardList.get(9).getTop() - chessBoardList.get(0).getTop();
+        return (
+                (chessBoard.getTop() == chessBoardClick.getTop() + heightBase * value
+                        && chessBoard.getLeft() == chessBoardClick.getLeft()) || (chessBoard.getTop()
+                        == chessBoardClick.getTop() - heightBase * value
+                        && chessBoard.getLeft() == chessBoardClick.getLeft()) ||
+                        (chessBoard.getLeft()
+                                == chessBoardClick.getLeft() + widthBase * value
+                                && chessBoard.getTop() == chessBoardClick.getTop()) || (chessBoard.getLeft()
+                        == chessBoardClick.getLeft() - widthBase * value
+                        && chessBoard.getTop() == chessBoardClick.getTop()));
+    }
 }
