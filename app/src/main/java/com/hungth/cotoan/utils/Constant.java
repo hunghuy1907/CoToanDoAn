@@ -53,6 +53,8 @@ public final class Constant {
     public static int RED_DOT_8 = 38;
     public static int RED_DOT_9 = 39;
 
-    public static int DOT = 40;
-    public static int NUMBER = 41;
+    public static int RED_DOT = 40;
+    public static int RED_NUMBER = 41;
+    public static int BLUE_DOT = 42;
+    public static int BLUE_NUMBER = 43;
 }

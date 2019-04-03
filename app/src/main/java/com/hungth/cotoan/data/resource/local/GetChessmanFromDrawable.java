@@ -47,7 +47,7 @@ public class GetChessmanFromDrawable {
         List<ChessMan> chessManReds = new ArrayList<>();
         for (int i = 0; i < CHESSMAN_BLUE_DOT.length; i++) {
             int leftChessman, rightChessman, topChessman, bottomChessman;
-            Bitmap bitmap;
+            Bitmap bitmap = null;
             if (i == 0) {
                 leftChessman = left + (right - left) / 9 * 4 + 8;
                 rightChessman = right - (right - left) / 9 * 4 - 8;
@@ -60,9 +60,9 @@ public class GetChessmanFromDrawable {
                 bottomChessman = top + (bottom - top) / 11 - 8;
             }
 
-            if (type == Constant.DOT) {
+            if (type == Constant.RED_DOT) {
                 bitmap = BitmapFactory.decodeResource(mContext.getResources(), CHESSMAN_RED_DOT[i]);
-            } else {
+            } if (type == Constant.RED_NUMBER){
                 bitmap = BitmapFactory.decodeResource(mContext.getResources(),
                         CHESSMAN_RED_NUMBER[i]);
             }
@@ -78,7 +78,7 @@ public class GetChessmanFromDrawable {
         List<ChessMan> chessManBlues = new ArrayList<>();
         for (int i = 0; i < CHESSMAN_BLUE_DOT.length; i++) {
             int leftChessman, rightChessman, topChessman, bottomChessman;
-            Bitmap bitmap;
+            Bitmap bitmap = null;
             if (i == 0) {
                 leftChessman = left + (right - left) / 9 * 4 + 8;
                 rightChessman = right - (right - left) / 9 * 4 - 8;
@@ -90,10 +90,10 @@ public class GetChessmanFromDrawable {
                 bottomChessman = bottom - 8;
                 topChessman = bottom - (bottom - top) / 11 + 8;
             }
-            if (type == Constant.DOT) {
+            if (type == Constant.BLUE_DOT) {
                 bitmap =
                         BitmapFactory.decodeResource(mContext.getResources(), CHESSMAN_BLUE_DOT[i]);
-            } else {
+            } if (type == Constant.BLUE_NUMBER){
                 bitmap = BitmapFactory.decodeResource(mContext.getResources(),
                         CHESSMAN_BLUE_NUMBER[i]);
             }
@@ -117,10 +117,8 @@ public class GetChessmanFromDrawable {
                 rightChessBoard = right - cellHorizontal * (9 - j - 1);
                 topChessboard = top + cellVertical * i;
                 bottomChessboard = bottom - cellVertical * (11 - i - 1);
-                Bitmap bitmap = BitmapFactory.decodeResource(mContext.getResources(),
-                        R.drawable.guide_60);
                 chessBoards.add(new ChessBoard(leftChessBoard, rightChessBoard, topChessboard,
-                        bottomChessboard, null, bitmap));
+                        bottomChessboard, null, null));
             }
         }
         return chessBoards;
