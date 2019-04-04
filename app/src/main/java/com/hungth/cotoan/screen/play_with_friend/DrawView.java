@@ -31,6 +31,9 @@ public class DrawView extends View {
     private int position;
     private boolean isBlueMove = true;
     private List<Integer> moves = new ArrayList<>();
+    private List<Integer> chessmanCanEats = new ArrayList<>();
+    private Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(),
+            R.drawable.guide_60);
 
     public DrawView(Context context) {
         super(context);
@@ -168,34 +171,24 @@ public class DrawView extends View {
         return false;
     }
 
-    public void drawBaseGuide(Canvas canvas, int nextPosition){
-        ChessBoard chessBoard = chessBoardList.get(nextPosition);
-        if (chessBoard.getChessMan() == null) {
-            Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(),
-                    R.drawable.guide);
-            chessBoard.setBitmap(bitmap);
-            Rect rectBoard = new Rect(chessBoard.getLeft(), chessBoard.getTop() + 6,
-                    chessBoard.getRight() - 2, chessBoard.getBottom() - 5);
-            canvas.drawBitmap(chessBoard.getBitmap(), null, rectBoard, null);
-            moves.add(nextPosition);
-        } else {
-            return;
-        }
-    }
-
     public void drawGuideVerticalTop(Canvas canvas) {
         for (int i = 1; i <= chessBoardClick.getChessMan().getValue(); i++) {
             if (position - 9 * i >= 0) {
                 if (chessBoardList.get(position - 9 * i).getChessMan() == null) {
                     ChessBoard chessBoard = chessBoardList.get(position - 9 * i);
-                    Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(),
-                            R.drawable.guide);
                     Rect rectBoard = new Rect(chessBoard.getLeft(), chessBoard.getTop() + 6,
                             chessBoard.getRight() - 2, chessBoard.getBottom() - 5);
                     canvas.drawBitmap(bitmap, null, rectBoard, null);
                     moves.add(position - 9 * i);
                 } else {
-                    return;
+//                    ChessMan chessManNext = chessBoardList.get(position - 9).getChessMan();
+//                    ChessMan chessMan = chessBoardClick.getChessMan();
+//                    if (i == 1 && checkSameType(chessMan, chessManNext)
+//                            && checkEat(chessMan.getValue(), chessManNext.getValue())) {
+//                        chessmanCanEats.add(position - 9 * getTotalChessboardToEnermy(chessMan.getValue(),
+//                                chessManNext.getValue()) - 9);
+//                    }
+//                    return;
                 }
             }
         }
@@ -205,14 +198,19 @@ public class DrawView extends View {
         for (int i = 1; i <= chessBoardClick.getChessMan().getValue(); i++) {
             if (position + 9 * i < 99) {
                 if (chessBoardList.get(position + 9 * i).getChessMan() == null) {
-                    Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(),
-                            R.drawable.guide);
                     ChessBoard chessBoard = chessBoardList.get(position + 9 * i);
                     Rect rectBoard = new Rect(chessBoard.getLeft(), chessBoard.getTop() + 6,
                             chessBoard.getRight() - 2, chessBoard.getBottom() - 5);
                     canvas.drawBitmap(bitmap, null, rectBoard, null);
                     moves.add(position + 9 * i);
                 } else {
+//                    ChessMan chessManNext = chessBoardList.get(position + 9).getChessMan();
+//                    ChessMan chessMan = chessBoardClick.getChessMan();
+//                    if (i == 1 && checkSameType(chessMan, chessManNext)
+//                            && checkEat(chessMan.getValue(), chessManNext.getValue())) {
+//                        chessmanCanEats.add(position + 9 * getTotalChessboardToEnermy(chessMan.getValue(),
+//                                chessManNext.getValue()) + 9);
+//                    }
                     return;
                 }
             }
@@ -224,8 +222,6 @@ public class DrawView extends View {
         for (int i = 1; i <= chessBoardClick.getChessMan().getValue(); i++) {
             if (position - i >= 9 * row) {
                 if (chessBoardList.get(position - i).getChessMan() == null) {
-                    Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(),
-                            R.drawable.guide);
                     ChessBoard chessBoard = chessBoardList.get(position - i);
                     Rect rectBoard = new Rect(chessBoard.getLeft(), chessBoard.getTop() + 6,
                             chessBoard.getRight() - 2, chessBoard.getBottom() - 5);
@@ -243,8 +239,6 @@ public class DrawView extends View {
         for (int i = 1; i <= chessBoardClick.getChessMan().getValue(); i++) {
             if (position + i < 9 * (row + 1)) {
                 if (chessBoardList.get(position + i).getChessMan() == null) {
-                    Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(),
-                            R.drawable.guide);
                     ChessBoard chessBoard = chessBoardList.get(position + i);
                     Rect rectBoard = new Rect(chessBoard.getLeft(), chessBoard.getTop() + 6,
                             chessBoard.getRight() - 2, chessBoard.getBottom() - 5);
@@ -265,8 +259,6 @@ public class DrawView extends View {
         for (int i = 1; i <= size; i++) {
             if (position - i * 8 >= 0 && chessBoardList.get(position - i * 8).getChessMan() == null) {
                 ChessBoard chessBoard = chessBoardList.get(position - i * 8);
-                Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(),
-                        R.drawable.guide);
                 chessBoard.setBitmap(bitmap);
                 Rect rectBoard = new Rect(chessBoard.getLeft(), chessBoard.getTop() + 6,
                         chessBoard.getRight() - 2, chessBoard.getBottom() - 5);
@@ -275,7 +267,6 @@ public class DrawView extends View {
             } else {
                 return;
             }
-
         }
     }
 
@@ -287,8 +278,6 @@ public class DrawView extends View {
         for (int i = 1; i <= size; i++) {
             if (position - i * 10 >= 0 && chessBoardList.get(position - i * 10).getChessMan() == null) {
                 ChessBoard chessBoard = chessBoardList.get(position - i * 10);
-                Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(),
-                        R.drawable.guide);
                 chessBoard.setBitmap(bitmap);
                 Rect rectBoard = new Rect(chessBoard.getLeft(), chessBoard.getTop() + 6,
                         chessBoard.getRight() - 2, chessBoard.getBottom() - 5);
@@ -297,7 +286,6 @@ public class DrawView extends View {
             } else {
                 return;
             }
-
         }
     }
 
@@ -309,8 +297,6 @@ public class DrawView extends View {
         for (int i = 1; i <= size; i++) {
             if (position + i * 10 <= 99 && chessBoardList.get(position + i * 10).getChessMan() == null) {
                 ChessBoard chessBoard = chessBoardList.get(position + i * 10);
-                Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(),
-                        R.drawable.guide);
                 chessBoard.setBitmap(bitmap);
                 Rect rectBoard = new Rect(chessBoard.getLeft(), chessBoard.getTop() + 6,
                         chessBoard.getRight() - 2, chessBoard.getBottom() - 5);
@@ -319,7 +305,6 @@ public class DrawView extends View {
             } else {
                 return;
             }
-
         }
     }
 
@@ -331,8 +316,6 @@ public class DrawView extends View {
         for (int i = 1; i <= size; i++) {
             if (position + i * 8 < 99 && chessBoardList.get(position + i * 8).getChessMan() == null) {
                 ChessBoard chessBoard = chessBoardList.get(position + i * 8);
-                Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(),
-                        R.drawable.guide);
                 chessBoard.setBitmap(bitmap);
                 Rect rectBoard = new Rect(chessBoard.getLeft(), chessBoard.getTop() + 6,
                         chessBoard.getRight() - 2, chessBoard.getBottom() - 5);
@@ -341,7 +324,6 @@ public class DrawView extends View {
             } else {
                 return;
             }
-
         }
     }
 
@@ -357,6 +339,7 @@ public class DrawView extends View {
     public void drawGuide(Canvas canvas) {
         if (chessBoardClick != null) {
             moves.clear();
+            chessmanCanEats.clear();
             drawGuideVerticalTop(canvas);
             drawGuideHorizontalLeft(canvas);
             drawGuideHorizontalRight(canvas);
@@ -366,10 +349,84 @@ public class DrawView extends View {
             drawGuideCrossLeftBottom(canvas);
             drawGuideCrossLeftTop(canvas);
             drawChessmanClick(canvas);
+            drawGuideEatEnermy(canvas);
         }
     }
 
-//    public void drawGuideEatChessman(Canvas canvas) {
-//        int nextChessboard
+    public void drawGuideEatEnermy(Canvas canvas) {
+        Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(),
+                R.drawable.guide_an_quan);
+        for (int i = 0; i < chessmanCanEats.size(); i++) {
+            ChessBoard chessBoard = chessBoardList.get(chessmanCanEats.get(i));
+            Rect rectBoard = new Rect(chessBoard.getLeft(), chessBoard.getTop() + 6,
+                    chessBoard.getRight() - 2, chessBoard.getBottom() - 5);
+            canvas.drawBitmap(bitmap, null, rectBoard, null);
+        }
+    }
+
+    public boolean checkEat(int valueClick, int valueNext) {
+        int totalChessboardToEnermy = getTotalChessboardToEnermy(valueClick, valueNext);
+        if (valueClick - valueNext == totalChessboardToEnermy)
+            return true;
+        int valueAdd = (valueClick + valueNext) >= 10 ?
+                (valueClick + valueNext) % 10 : (valueClick + valueNext);
+        if (valueAdd == totalChessboardToEnermy)
+            return true;
+        return false;
+    }
+
+    public int getTotalChessboardToEnermy(int valueClick, int valueNext) {
+        int max = getMax(valueClick, valueNext);
+        for (int i = 2; i < max + 2; i++) {
+            if (position - 9 * i >= 0) {
+                ChessBoard chessBoard = chessBoardList.get(position - 9 * i);
+                if (chessBoard.getChessMan() != null &&
+                        !checkSameType(chessBoard.getChessMan(), chessBoardClick.getChessMan())) {
+                    return i - 1;
+                }
+            }
+        }
+        return 0;
+    }
+
+//    public int getTotalChessboardVẻ(int valueClick, int valueNext) {
+//        int max = getMax(valueClick, valueNext);
+//        for (int i = 2; i < max + 2; i++) {
+//            if (position - 9 * i >= 0) {
+//                ChessBoard chessBoard = chessBoardList.get(position - 9 * i);
+//                if (chessBoard.getChessMan() != null &&
+//                        !checkSameType(chessBoard.getChessMan(), chessBoardClick.getChessMan())) {
+//                    return i - 1;
+//                }
+//            }
+//        }
+//        return 0;
 //    }
+
+    public boolean checkSameType(ChessMan chessMan, ChessMan chessMan1) {
+        if (chessMan.getmType() == Constant.BLUE_DOT || chessMan.getmType() == Constant.BLUE_NUMBER) {
+            return (chessMan1.getmType() == Constant.BLUE_DOT || chessMan1.getmType() == Constant.BLUE_NUMBER);
+        } else {
+            return (chessMan1.getmType() == Constant.RED_DOT || chessMan1.getmType() == Constant.RED_NUMBER);
+        }
+    }
+
+    public int getMax(int valueClick, int valueNext) {
+        int max = -10000;
+        List<Integer> calculator = new ArrayList<>();
+        int add = (valueClick + valueNext) >= 10 ?
+                (valueClick + valueNext) % 10 : (valueClick + valueNext);
+        int minus = valueClick - valueNext;
+        int multy = (valueClick * valueNext) - ((valueClick * valueNext)/10) * 10;
+        int sub = 0;
+        calculator.add(add);
+        calculator.add(minus);
+        calculator.add(multy);
+        calculator.add(sub);
+        for (int i = 0; i < calculator.size(); i++) {
+            if (max <  calculator.get(i))
+                max = calculator.get(i);
+        }
+        return max;
+    }
 }
