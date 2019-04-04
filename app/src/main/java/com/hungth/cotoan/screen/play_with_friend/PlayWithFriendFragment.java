@@ -69,14 +69,14 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView{
     }
 
     private void observeChessmans(int left, int right, int top, int bottom) {
-        mViewModel.getChessmanBlues(left, right, top, bottom, 41).observe(getActivity(), new Observer<List<ChessMan>>() {
+        mViewModel.getChessmanBlues(left, right, top, bottom, Constant.BLUE_NUMBER).observe(getActivity(), new Observer<List<ChessMan>>() {
             @Override
             public void onChanged(@Nullable List<ChessMan> chessMEN) {
                 drawView.setChessManBlueList(chessMEN);
             }
         });
 
-        mViewModel.getChessmanReds(left, right, top, bottom, Constant.NUMBER).observe(getActivity(), new Observer<List<ChessMan>>() {
+        mViewModel.getChessmanReds(left, right, top, bottom, Constant.RED_NUMBER).observe(getActivity(), new Observer<List<ChessMan>>() {
             @Override
             public void onChanged(@Nullable List<ChessMan> chessMEN) {
                 drawView.setchessManRedList(chessMEN);
