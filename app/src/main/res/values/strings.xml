@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">CoToan</string>
     <string name="facebook_app_id">810150606029944</string>
+    <string name="fb_login_protocol_scheme">fb810150606029944</string>
     <string name="ACCOUNT_KIT_CLIENT_TOKEN">[ACCOUNT_KIT_CLIENT_TOKEN]</string>
     <string name="facebook_login_protocol_scheme">add late</string>
     <string name="play_online_button">CHƠI VỚI BẠN BÈ</string>
