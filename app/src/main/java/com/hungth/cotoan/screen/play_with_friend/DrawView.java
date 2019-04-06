@@ -420,11 +420,14 @@ public class DrawView extends View {
     public int getTotalChessboardVerticalBottomticalTop(int valueClick, int valueNext) {
         int max = getMax(valueClick, valueNext);
         for (int i = 2; i < max + 2; i++) {
-            if (position - i >= 0) {
+            if (position - 9 * i >= 0) {
                 ChessBoard chessBoard = chessBoardList.get(position - 9 * i);
-                if (chessBoard.getChessMan() != null &&
-                        !checkSameType(chessBoard.getChessMan(), chessBoardClick.getChessMan())) {
-                    return i - 1;
+                if (chessBoard.getChessMan() != null) {
+                    if (!checkSameType(chessBoard.getChessMan(), chessBoardClick.getChessMan())) {
+                        return i - 1;
+                    } else {
+                        return 0;
+                    }
                 }
             }
         }
@@ -436,9 +439,12 @@ public class DrawView extends View {
         for (int i = 2; i < max + 2; i++) {
             if (position + 9 * i < 99) {
                 ChessBoard chessBoard = chessBoardList.get(position + 9 * i);
-                if (chessBoard.getChessMan() != null &&
-                        !checkSameType(chessBoard.getChessMan(), chessBoardClick.getChessMan())) {
-                    return i - 1;
+                if (chessBoard.getChessMan() != null) {
+                    if (!checkSameType(chessBoard.getChessMan(), chessBoardClick.getChessMan())) {
+                        return i - 1;
+                    } else {
+                        return 0;
+                    }
                 }
             }
         }
@@ -451,9 +457,12 @@ public class DrawView extends View {
         for (int i = 2; i < max + 2; i++) {
             if (position - i >= 9 * row) {
                 ChessBoard chessBoard = chessBoardList.get(position - i);
-                if (chessBoard.getChessMan() != null &&
-                        !checkSameType(chessBoard.getChessMan(), chessBoardClick.getChessMan())) {
-                    return i - 1;
+                if (chessBoard.getChessMan() != null) {
+                    if (!checkSameType(chessBoard.getChessMan(), chessBoardClick.getChessMan())) {
+                        return i - 1;
+                    } else {
+                        return 0;
+                    }
                 }
             }
         }
@@ -466,9 +475,12 @@ public class DrawView extends View {
         for (int i = 2; i < max + 2; i++) {
             if (position + i < 9 * (row + 1)) {
                 ChessBoard chessBoard = chessBoardList.get(position + i);
-                if (chessBoard.getChessMan() != null &&
-                        !checkSameType(chessBoard.getChessMan(), chessBoardClick.getChessMan())) {
-                    return i - 1;
+                if (chessBoard.getChessMan() != null) {
+                    if (!checkSameType(chessBoard.getChessMan(), chessBoardClick.getChessMan())) {
+                        return i - 1;
+                    } else {
+                        return 0;
+                    }
                 }
             }
         }
@@ -480,9 +492,12 @@ public class DrawView extends View {
         for (int i = 2; i < max + 2; i++) {
             if (position - i * 8 >= 0) {
                 ChessBoard chessBoard = chessBoardList.get(position - i * 8);
-                if (chessBoard.getChessMan() != null &&
-                        !checkSameType(chessBoard.getChessMan(), chessBoardClick.getChessMan())) {
-                    return i - 1;
+                if (chessBoard.getChessMan() != null) {
+                    if (!checkSameType(chessBoard.getChessMan(), chessBoardClick.getChessMan())) {
+                        return i - 1;
+                    } else {
+                        return 0;
+                    }
                 }
             }
         }
@@ -494,9 +509,12 @@ public class DrawView extends View {
         for (int i = 2; i < max + 2; i++) {
             if (position - i * 10 >= 0) {
                 ChessBoard chessBoard = chessBoardList.get(position - i * 10);
-                if (chessBoard.getChessMan() != null &&
-                        !checkSameType(chessBoard.getChessMan(), chessBoardClick.getChessMan())) {
-                    return i - 1;
+                if (chessBoard.getChessMan() != null) {
+                    if (!checkSameType(chessBoard.getChessMan(), chessBoardClick.getChessMan())) {
+                        return i - 1;
+                    } else {
+                        return 0;
+                    }
                 }
             }
         }
@@ -508,9 +526,12 @@ public class DrawView extends View {
         for (int i = 2; i < max + 2; i++) {
             if (position + i * 8 < 99) {
                 ChessBoard chessBoard = chessBoardList.get(position + i * 8);
-                if (chessBoard.getChessMan() != null &&
-                        !checkSameType(chessBoard.getChessMan(), chessBoardClick.getChessMan())) {
-                    return i - 1;
+                if (chessBoard.getChessMan() != null) {
+                    if (!checkSameType(chessBoard.getChessMan(), chessBoardClick.getChessMan())) {
+                        return i - 1;
+                    } else {
+                        return 0;
+                    }
                 }
             }
         }
@@ -522,9 +543,12 @@ public class DrawView extends View {
         for (int i = 2; i < max + 2; i++) {
             if (position + i * 10 <= 99) {
                 ChessBoard chessBoard = chessBoardList.get(position + i * 10);
-                if (chessBoard.getChessMan() != null &&
-                        !checkSameType(chessBoard.getChessMan(), chessBoardClick.getChessMan())) {
-                    return i - 1;
+                if (chessBoard.getChessMan() != null) {
+                    if (!checkSameType(chessBoard.getChessMan(), chessBoardClick.getChessMan())) {
+                        return i - 1;
+                    } else {
+                        return 0;
+                    }
                 }
             }
         }
