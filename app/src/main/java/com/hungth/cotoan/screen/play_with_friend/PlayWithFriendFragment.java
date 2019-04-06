@@ -26,7 +26,7 @@ import com.hungth.cotoan.utils.Constant;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PlayWithFriendFragment extends BaseFragment implements IGameView{
+public class PlayWithFriendFragment extends BaseFragment implements IGameView {
     public static String TAG = PlayWithFriendFragment.class.getSimpleName();
     private FragmentPlayWithFriendBinding mBinding;
     private PlayWithFriendViewModel mViewModel;
