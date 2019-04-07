@@ -22,13 +22,14 @@
             android:layout_height="wrap_content"
             android:background="@drawable/button_home"
             android:text="@string/play_online_button"
-            android:textColor="#B4BFEB"
+            android:textColor="@color/colorLight"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.341" />
+            app:layout_constraintVertical_bias="0.341"
+            android:onClick="@{() -> viewModel.playOnline()}"/>
 
         <Button
             android:id="@+id/button_play_with_computer"
@@ -37,11 +38,12 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/button_home"
             android:text="@string/play_with_computer_button"
-            android:textColor="#B4BFEB"
+            android:textColor="@color/colorLight"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_play_online" />
+            app:layout_constraintTop_toBottomOf="@+id/button_play_online"
+            android:onClick="@{() -> viewModel.playManVsCom()}"/>
 
         <Button
             android:id="@+id/button_play_2_people"
@@ -50,11 +52,12 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/button_home"
             android:text="@string/play_2_person_button"
-            android:textColor="#B4BFEB"
+            android:textColor="@color/colorLight"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_play_with_computer" />
+            app:layout_constraintTop_toBottomOf="@+id/button_play_with_computer"
+            android:onClick="@{() -> viewModel.playManVsMan()}"/>
 
         <Button
             android:id="@+id/button_guide"
@@ -63,7 +66,7 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/button_home"
             android:text="@string/guide_button"
-            android:textColor="#B4BFEB"
+            android:textColor="@color/colorLight"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -76,7 +79,7 @@
             android:layout_marginTop="20dp"
             android:background="@drawable/button_home"
             android:text="@string/setting_button"
-            android:textColor="#B4BFEB"
+            android:textColor="@color/colorLight"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

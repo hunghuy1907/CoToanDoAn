@@ -1,5 +1,8 @@
 package com.hungth.cotoan.utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by le.quang.dao on 10/03/2017.
  */
@@ -57,4 +60,7 @@ public final class Constant {
     public static int RED_NUMBER = 41;
     public static int BLUE_DOT = 42;
     public static int BLUE_NUMBER = 43;
+    public static String[] points = new String[] {"10", "15", "20", "25", "30", "KHÔNG CƯỢC"};
+    public static String[] times = new String[] {"60", "90", "120", "TẮT"};
+    public static String[] levels = new String[] {"DỄ", "TRUNG BÌNH", "KHÓ"};
 }

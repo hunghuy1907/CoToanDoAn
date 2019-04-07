@@ -5,9 +5,11 @@ import com.hungth.cotoan.screen.base.BaseViewModel;
 
 public class HomeViewModel extends BaseViewModel {
     private ChessManRepository mChessManRepository;
+    private PlayChess playChess;
 
-    public HomeViewModel(ChessManRepository mChessManRepository) {
+    public HomeViewModel(ChessManRepository mChessManRepository, PlayChess playChess) {
         this.mChessManRepository = mChessManRepository;
+        this.playChess = playChess;
     }
 
     @Override
@@ -18,5 +20,17 @@ public class HomeViewModel extends BaseViewModel {
     @Override
     protected void onStop() {
 
+    }
+
+    public void playOnline() {
+        playChess.playOnline();
+    }
+
+    public void playManVsMan() {
+        playChess.playOneVsOne();
+    }
+
+    public void playManVsCom() {
+        playChess.playComputer();
     }
 }
