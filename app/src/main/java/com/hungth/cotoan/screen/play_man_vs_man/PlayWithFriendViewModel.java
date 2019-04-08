@@ -10,35 +10,21 @@ import com.hungth.cotoan.screen.base.BaseViewModel;
 import java.util.List;
 
 public class PlayWithFriendViewModel extends BaseViewModel {
+    private IGameView iGameView;
 
     private ChessManRepository mChessManRepository;
     private MutableLiveData<List<ChessMan>> mChessManRedMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<List<ChessMan>> mChessManBlueMutableLiveData = new MutableLiveData<>();
     private MutableLiveData<List<ChessBoard>> mChessBoardMutableLiveData = new MutableLiveData<>();
 
-    public PlayWithFriendViewModel(ChessManRepository mChessManRepository) {
+    public PlayWithFriendViewModel(IGameView iGameView, ChessManRepository mChessManRepository) {
+        this.iGameView = iGameView;
         this.mChessManRepository = mChessManRepository;
     }
 
     @Override
     protected void onStart() {
 
-    }
-
-    public MutableLiveData<List<ChessMan>> getmChessManRedMutableLiveData() {
-        return mChessManRedMutableLiveData;
-    }
-
-    public void setmChessManRedMutableLiveData(MutableLiveData<List<ChessMan>> mChessManRedMutableLiveData) {
-        this.mChessManRedMutableLiveData = mChessManRedMutableLiveData;
-    }
-
-    public MutableLiveData<List<ChessMan>> getmChessManBlueMutableLiveData() {
-        return mChessManBlueMutableLiveData;
-    }
-
-    public void setmChessManBlueMutableLiveData(MutableLiveData<List<ChessMan>> mChessManBlueMutableLiveData) {
-        this.mChessManBlueMutableLiveData = mChessManBlueMutableLiveData;
     }
 
     public MutableLiveData<List<ChessMan>> getChessmanReds(int left, int right, int top, int bottom, int type) {
@@ -59,5 +45,9 @@ public class PlayWithFriendViewModel extends BaseViewModel {
     @Override
     protected void onStop() {
 
+    }
+
+    public void showMenu() {
+        iGameView.showMenu();
     }
 }
