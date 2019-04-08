@@ -29,7 +29,6 @@ public class ChessManRepository {
         return mChessmanLocalDataSource.getChessmanReds(left, right, top, bottom, type);
     }
 
-
     public List<ChessMan> getChessmanBlues(int left, int right, int top, int bottom, int type) {
         return mChessmanLocalDataSource.getChessmanBlues(left, right, top, bottom, type);
     }

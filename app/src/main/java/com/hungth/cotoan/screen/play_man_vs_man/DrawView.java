@@ -18,18 +18,12 @@ import java.util.List;
 
 public class DrawView extends View {
 
-    private List<ChessMan> chessManRedList;
-    private List<ChessMan> chessManBlueList;
-
-    public void setChessBoardList(List<ChessBoard> chessBoardList) {
-        this.chessBoardList = chessBoardList;
-    }
-
+    public static List<ChessBoard> newBoard = new ArrayList<>();
     private List<ChessBoard> chessBoardList;
     private ChessBoard chessBoardClick;
     private List<Integer> stackChessBoards = new ArrayList<>();
     private int position;
-    private boolean isBlueMove = true;
+    private boolean isBlueMove = false;
     private List<Integer> moves = new ArrayList<>();
     private List<Integer> chessmanCanEats = new ArrayList<>();
     private Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(),
@@ -39,12 +33,8 @@ public class DrawView extends View {
         super(context);
     }
 
-    public void setChessManBlueList(List<ChessMan> chessManBlueList) {
-        this.chessManBlueList = chessManBlueList;
-    }
-
-    public void setchessManRedList(List<ChessMan> chessManRedList) {
-        this.chessManRedList = chessManRedList;
+    public void setChessBoardList(List<ChessBoard> chessBoardList) {
+        this.chessBoardList = chessBoardList;
     }
 
     @Override
@@ -111,27 +101,6 @@ public class DrawView extends View {
         }
         invalidate();
         return true;
-    }
-
-    public List<ChessBoard> getChessManInChessBoard(List<ChessBoard> chessBoards) {
-        List<ChessMan> chessManList = new ArrayList<>();
-        chessManList.addAll(chessManRedList);
-        chessManList.addAll(chessManBlueList);
-        for (int i = 0; i < chessBoards.size(); i++) {
-            for (int j = 0; j < chessManList.size(); j++) {
-                if (checkNotEmpty(chessManList.get(j), chessBoards.get(i))) {
-                    chessBoards.get(i).setChessMan(chessManList.get(j));
-                }
-            }
-        }
-        return chessBoards;
-    }
-
-    private boolean checkNotEmpty(ChessMan chessMan, ChessBoard chessBoard) {
-        return (chessMan.getmLeft() > chessBoard.getLeft()
-                && chessMan.getmRight() < chessBoard.getRight()
-                && chessMan.getmTop() > chessBoard.getTop()
-                && chessMan.getmBottom() < chessBoard.getBottom());
     }
 
     private void moveChessman() {
@@ -580,5 +549,11 @@ public class DrawView extends View {
                 max = calculator.get(i);
         }
         return max;
+    }
+
+    public void newGame() {
+        setChessBoardList(null);
+        chessBoardList = newBoard;
+        invalidate();
     }
 }

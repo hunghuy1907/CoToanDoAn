@@ -71,26 +71,12 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView {
     }
 
     private void observeChessmans(int left, int right, int top, int bottom) {
-        mViewModel.getChessmanBlues(left, right, top, bottom, Constant.BLUE_NUMBER).observe(this, new Observer<List<ChessMan>>() {
-            @Override
-            public void onChanged(@Nullable List<ChessMan> chessMEN) {
-                drawView.setChessManBlueList(chessMEN);
-            }
-        });
+        List<ChessMan> redChessmans = mViewModel.getChessManReds(left, right, top, bottom, Constant.RED_NUMBER);
+        List<ChessMan> blueChessmans = mViewModel.getChessManBlues(left, right, top, bottom, Constant.BLUE_NUMBER);
+        List<ChessBoard> chessBoards = mViewModel.getChessBoards(left, right, top, bottom, true);
 
-        mViewModel.getChessmanReds(left, right, top, bottom, Constant.RED_NUMBER).observe(this, new Observer<List<ChessMan>>() {
-            @Override
-            public void onChanged(@Nullable List<ChessMan> chessMEN) {
-                drawView.setchessManRedList(chessMEN);
-            }
-        });
-
-        mViewModel.getChessboard(left, right, top, bottom, true).observe(this, new Observer<List<ChessBoard>>() {
-            @Override
-            public void onChanged(@Nullable List<ChessBoard> chessBoards) {
-                drawView.setChessBoardList(drawView.getChessManInChessBoard(chessBoards));
-            }
-        });
+        drawView.newBoard = mViewModel.getChessManInChessBoard(chessBoards, redChessmans, blueChessmans);
+        drawView.setChessBoardList(mViewModel.getChessManInChessBoard(chessBoards, redChessmans, blueChessmans));
     }
 
     @Override
@@ -120,7 +106,8 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView {
                         Toast.makeText(getActivity(), "return", Toast.LENGTH_SHORT).show();
                         return true;
                     case R.id.item_new_game:
-                        Toast.makeText(getActivity(), "new_game", Toast.LENGTH_SHORT).show();
+                        initChess(PlayWithFriendFragment.this);
+                        drawView.newGame();
                         return true;
                     case R.id.item_guide:
                         Toast.makeText(getActivity(), "guide", Toast.LENGTH_SHORT).show();
