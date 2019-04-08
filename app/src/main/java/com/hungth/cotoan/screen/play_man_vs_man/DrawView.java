@@ -1,4 +1,4 @@
-package com.hungth.cotoan.screen.play_with_friend;
+package com.hungth.cotoan.screen.play_man_vs_man;
 
 import android.content.Context;
 import android.graphics.Bitmap;

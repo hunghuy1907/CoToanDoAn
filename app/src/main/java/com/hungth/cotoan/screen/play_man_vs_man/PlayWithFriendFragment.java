@@ -1,11 +1,8 @@
-package com.hungth.cotoan.screen.play_with_friend;
+package com.hungth.cotoan.screen.play_man_vs_man;
 
 import android.arch.lifecycle.Observer;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -23,7 +20,6 @@ import com.hungth.cotoan.databinding.FragmentPlayWithFriendBinding;
 import com.hungth.cotoan.screen.base.BaseFragment;
 import com.hungth.cotoan.utils.Constant;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class PlayWithFriendFragment extends BaseFragment implements IGameView {

@@ -6,4 +6,8 @@ public interface PlayChess {
     void playComputer();
 
     void playOneVsOne();
+
+    void setting();
+
+    void guide();
 }

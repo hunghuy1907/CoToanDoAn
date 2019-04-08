@@ -70,7 +70,8 @@
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_play_2_people" />
+            app:layout_constraintTop_toBottomOf="@+id/button_play_2_people"
+            android:onClick="@{() -> viewModel.guide()}"/>
 
         <Button
             android:id="@+id/button_setting"
@@ -83,7 +84,8 @@
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/button_guide" />
+            app:layout_constraintTop_toBottomOf="@+id/button_guide"
+            android:onClick="@{() -> viewModel.setting()}" />
 
         <com.facebook.login.widget.LoginButton
             android:id="@+id/login_button"

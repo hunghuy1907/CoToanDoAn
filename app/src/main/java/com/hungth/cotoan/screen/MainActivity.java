@@ -6,13 +6,9 @@ import android.content.pm.Signature;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Base64;
-import android.util.Log;
 
-import com.facebook.FacebookSdk;
 import com.hungth.cotoan.R;
 import com.hungth.cotoan.screen.home.HomeFragment;
-import com.hungth.cotoan.screen.play_with_friend.PlayWithFriendFragment;
-import com.hungth.cotoan.screen.play_with_friend.PlayWithFriendViewModel;
 import com.hungth.cotoan.utils.common.FragmentTransactionUtils;
 
 import java.security.MessageDigest;
@@ -37,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
             for (Signature signature : info.signatures) {
                 MessageDigest md = MessageDigest.getInstance("SHA");
                 md.update(signature.toByteArray());
-                System.out.println("--->>> key: " + Base64.encodeToString(md.digest(), Base64.DEFAULT));
+//                System.out.println("--->>> key: " + Base64.encodeToString(md.digest(), Base64.DEFAULT));
             }
         } catch (PackageManager.NameNotFoundException e) {
 

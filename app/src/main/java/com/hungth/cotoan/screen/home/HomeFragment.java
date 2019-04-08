@@ -25,6 +25,8 @@ import com.hungth.cotoan.data.model.CalculatorType;
 import com.hungth.cotoan.data.repository.ChessManRepository;
 import com.hungth.cotoan.data.resource.local.ChessmanLocalDataSource;
 import com.hungth.cotoan.databinding.FragmentHomeBinding;
+import com.hungth.cotoan.databinding.LayoutPlayOnlineBinding;
+import com.hungth.cotoan.databinding.LayoutSettingMainBinding;
 import com.hungth.cotoan.databinding.LayoutSettingManVsComBinding;
 import com.hungth.cotoan.databinding.LayoutSettingManVsManBinding;
 import com.hungth.cotoan.screen.base.BaseFragment;
@@ -42,12 +44,16 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
     private FragmentHomeBinding binding;
     private LayoutSettingManVsManBinding bindingSetting;
     private LayoutSettingManVsComBinding manVsComBinding;
+    private LayoutSettingMainBinding settingMainBinding;
+    private LayoutPlayOnlineBinding onlineBinding;
     private HomeViewModel viewModel;
     private DialogSettingViewModel settingViewModel;
     private CallbackManager callbackManager;
     private LoginButton loginButton;
     private Dialog dialogSettingManVsMan;
     private Dialog dialogSettingManVsCom;
+    private Dialog dialogPlayOnlline;
+    private Dialog dialogSettingHome;
 
     @Nullable
     @Override
@@ -99,8 +105,11 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
             }
         });
         settingViewModel = new DialogSettingViewModel(this);
+
         initDialogSettingManVsMan();
         initDialogSettingManVsCom();
+        initDialogPlayOnline();
+        initDialogSettingMain();
     }
 
     public void loginResult(LoginResult loginResult) {
@@ -176,9 +185,40 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
         dialogSettingManVsCom.getWindow().setLayout(width, height);
     }
 
+    private void initDialogPlayOnline() {
+        if (dialogPlayOnlline == null) {
+            dialogPlayOnlline = new Dialog(getActivity());
+        }
+        onlineBinding = DataBindingUtil.inflate(LayoutInflater.from(getActivity()),
+                R.layout.layout_play_online, null, false);
+        dialogPlayOnlline.setContentView(onlineBinding.getRoot());
+        onlineBinding.setViewModel(settingViewModel);
+        int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.8);
+        int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.5);
+
+        dialogPlayOnlline.getWindow().setLayout(width, height);
+    }
+
+    private void initDialogSettingMain() {
+        if (dialogSettingHome == null) {
+            dialogSettingHome = new Dialog(getActivity());
+        }
+        settingMainBinding = DataBindingUtil.inflate(LayoutInflater.from(getActivity()),
+                R.layout.layout_setting_main, null, false);
+        dialogSettingHome.setContentView(settingMainBinding.getRoot());
+        settingMainBinding.setViewModel(settingViewModel);
+        int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.8);
+        int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.5);
+
+        dialogSettingHome.getWindow().setLayout(width, height);
+    }
+
+
+    // home
+
     @Override
     public void playOnline() {
-        sendLinkToInvitePlayOnline();
+        dialogPlayOnlline.show();
     }
 
     @Override
@@ -192,16 +232,20 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
     }
 
     @Override
-    public void nextGoFirstManVsMan() {
-        if (bindingSetting.textGoFirst.getText().toString().equals("XANH")) {
-            bindingSetting.textGoFirst.setText("ĐỎ");
-        } else {
-            bindingSetting.textGoFirst.setText("XANH");
-        }
+    public void setting() {
+        dialogSettingHome.show();
     }
 
     @Override
-    public void previousGoFirstManVsMan() {
+    public void guide() {
+
+    }
+
+
+    // Man vs Man
+
+    @Override
+    public void goFirstManVsMan() {
         if (bindingSetting.textGoFirst.getText().toString().equals("XANH")) {
             bindingSetting.textGoFirst.setText("ĐỎ");
         } else {
@@ -237,7 +281,6 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
             }
         }
     }
-
 
     @Override
     public void clickAddManVsMan(int type) {
@@ -324,6 +367,9 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
         initDialogSettingManVsMan();
     }
 
+
+    // Man vs Com
+
     @Override
     public void levelNext() {
         for (int i = 0; i < Constant.levels.length; i++) {
@@ -360,16 +406,7 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
     }
 
     @Override
-    public void nextGoFirstManVsCom() {
-        if (manVsComBinding.textGoFirst.getText().toString().equals("NGƯỜI")) {
-            manVsComBinding.textGoFirst.setText("MÁY");
-        } else {
-            manVsComBinding.textGoFirst.setText("NGƯỜI");
-        }
-    }
-
-    @Override
-    public void previousGoFirstManVsCom() {
+    public void goFirstManVsCom() {
         if (manVsComBinding.textGoFirst.getText().toString().equals("NGƯỜI")) {
             manVsComBinding.textGoFirst.setText("MÁY");
         } else {
@@ -482,5 +519,49 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
     @Override
     public void agreeManVsCom() {
 
+    }
+
+    @Override
+    public void cancelPlayOnline() {
+        dialogPlayOnlline.dismiss();
+        initDialogPlayOnline();
+    }
+
+    @Override
+    public void playMessenger() {
+        sendLinkToInvitePlayOnline();
+    }
+
+    @Override
+    public void playBlutooth() {
+
+    }
+
+
+    // setting home
+
+    @Override
+    public void soundSetting() {
+        if (settingMainBinding.textSound.getText().toString().equals("BẬT")) {
+            settingMainBinding.textSound.setText("TẮT");
+        } else {
+            settingMainBinding.textSound.setText("BẬT");
+        }
+    }
+
+    @Override
+    public void typeSetting() {
+        if (settingMainBinding.textType.getText().toString().equals("SỐ")) {
+            settingMainBinding.textType.setText("CHỮ");
+        } else {
+            settingMainBinding.textType.setText("SỐ");
+        }
+    }
+
+
+    @Override
+    public void doneSetting() {
+        dialogSettingHome.dismiss();
+        initDialogSettingMain();
     }
 }

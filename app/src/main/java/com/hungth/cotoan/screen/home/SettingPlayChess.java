@@ -1,9 +1,9 @@
 package com.hungth.cotoan.screen.home;
 
 public interface SettingPlayChess {
-    void nextGoFirstManVsMan();
 
-    void previousGoFirstManVsMan();
+    //Man vs Man
+    void goFirstManVsMan();
 
     void nextPointManVsMan();
 
@@ -25,15 +25,16 @@ public interface SettingPlayChess {
 
     void cancleManVsMan();
 
+
+    // Man VS com
+
     void levelNext();
 
     void levelPrevious();
 
     void cancelManVsCom();
 
-    void nextGoFirstManVsCom();
-
-    void previousGoFirstManVsCom();
+    void goFirstManVsCom();
 
     void nextPointManVsCom();
 
@@ -52,4 +53,23 @@ public interface SettingPlayChess {
     void previousTimeManVsCom();
 
     void agreeManVsCom();
+
+
+    // Play online
+
+    void cancelPlayOnline();
+
+    void playMessenger();
+
+    void playBlutooth();
+
+
+    // setting home
+
+    void soundSetting();
+
+    void typeSetting();
+
+    void doneSetting();
+
 }

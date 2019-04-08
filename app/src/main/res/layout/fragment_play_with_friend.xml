@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="com.hungth.cotoan.screen.play_with_friend.PlayWithFriendViewModel" />
+            type="com.hungth.cotoan.screen.play_man_vs_man.PlayWithFriendViewModel" />
 
     </data>
 

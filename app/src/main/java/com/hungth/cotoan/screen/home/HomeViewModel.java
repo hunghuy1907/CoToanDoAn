@@ -33,4 +33,12 @@ public class HomeViewModel extends BaseViewModel {
     public void playManVsCom() {
         playChess.playComputer();
     }
+
+    public void setting() {
+        playChess.setting();
+    }
+
+    public void guide() {
+        playChess.guide();
+    }
 }

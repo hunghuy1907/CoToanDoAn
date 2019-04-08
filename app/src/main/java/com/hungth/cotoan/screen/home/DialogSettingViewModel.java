@@ -24,16 +24,14 @@ public class DialogSettingViewModel extends BaseViewModel {
 
     }
 
+    // man vs man
+
     public void cancel() {
         settingPlayOnline.cancleManVsMan();
     }
 
-    public void nextGoFirst() {
-        settingPlayOnline.nextGoFirstManVsMan();
-    }
-
-    public void previousGoFirst() {
-        settingPlayOnline.previousGoFirstManVsMan();
+    public void goFirst() {
+        settingPlayOnline.goFirstManVsMan();
     }
 
     public void nextPoint() {
@@ -92,16 +90,15 @@ public class DialogSettingViewModel extends BaseViewModel {
         settingPlayOnline.agreeManVsMan();
     }
 
+
+    // man vs com
+
     public void cancelManVsCom() {
         settingPlayOnline.cancelManVsCom();
     }
 
-    public void nextGoFirstManVsCom() {
-        settingPlayOnline.nextGoFirstManVsCom();
-    }
-
-    public void previousGoFirstManVsCom() {
-        settingPlayOnline.previousGoFirstManVsCom();
+    public void goFirstManVsCom() {
+        settingPlayOnline.goFirstManVsCom();
     }
 
     public void nextPointManVsCom() {
@@ -166,5 +163,33 @@ public class DialogSettingViewModel extends BaseViewModel {
 
     public void previousLevel() {
         settingPlayOnline.levelPrevious();
+    }
+
+    // play online
+
+    public void cancelPlayOnline() {
+        settingPlayOnline.cancelPlayOnline();
+    }
+
+    public void playMessenger() {
+        settingPlayOnline.playMessenger();
+    }
+
+    public void playBluetooth() {
+        settingPlayOnline.playBlutooth();
+    }
+
+    // setting home
+
+    public void soundSetting() {
+        settingPlayOnline.soundSetting();
+    }
+
+    public void typeSetting() {
+        settingPlayOnline.typeSetting();
+    }
+
+    public void doneSetting() {
+        settingPlayOnline.doneSetting();
     }
 }
