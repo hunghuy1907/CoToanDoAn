@@ -1,15 +1,20 @@
 package com.hungth.cotoan.screen.play_man_vs_man;
 
 import android.arch.lifecycle.Observer;
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
+import android.widget.Toast;
 
 import com.hungth.cotoan.R;
 import com.hungth.cotoan.data.model.ChessBoard;
@@ -28,6 +33,7 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView {
     private PlayWithFriendViewModel mViewModel;
     private static int left, right, top, bottom;
     private DrawView drawView;
+    private PopupMenu popupMenu;
 
     public static PlayWithFriendFragment getInstance() {
         return new PlayWithFriendFragment();
@@ -45,7 +51,7 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView {
     @Override
     public void onViewCreated(@NonNull final View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mViewModel = new PlayWithFriendViewModel(ChessManRepository.getInstance(ChessmanLocalDataSource.getInstance(getActivity())));
+        mViewModel = new PlayWithFriendViewModel(this, ChessManRepository.getInstance(ChessmanLocalDataSource.getInstance(getActivity())));
         mBinding.setViewModel(mViewModel);
         initChess(this);
     }
@@ -65,21 +71,21 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView {
     }
 
     private void observeChessmans(int left, int right, int top, int bottom) {
-        mViewModel.getChessmanBlues(left, right, top, bottom, Constant.BLUE_NUMBER).observe(getActivity(), new Observer<List<ChessMan>>() {
+        mViewModel.getChessmanBlues(left, right, top, bottom, Constant.BLUE_NUMBER).observe(this, new Observer<List<ChessMan>>() {
             @Override
             public void onChanged(@Nullable List<ChessMan> chessMEN) {
                 drawView.setChessManBlueList(chessMEN);
             }
         });
 
-        mViewModel.getChessmanReds(left, right, top, bottom, Constant.RED_NUMBER).observe(getActivity(), new Observer<List<ChessMan>>() {
+        mViewModel.getChessmanReds(left, right, top, bottom, Constant.RED_NUMBER).observe(this, new Observer<List<ChessMan>>() {
             @Override
             public void onChanged(@Nullable List<ChessMan> chessMEN) {
                 drawView.setchessManRedList(chessMEN);
             }
         });
 
-        mViewModel.getChessboard(left, right, top, bottom, true).observe(getActivity(), new Observer<List<ChessBoard>>() {
+        mViewModel.getChessboard(left, right, top, bottom, true).observe(this, new Observer<List<ChessBoard>>() {
             @Override
             public void onChanged(@Nullable List<ChessBoard> chessBoards) {
                 drawView.setChessBoardList(drawView.getChessManInChessBoard(chessBoards));
@@ -90,5 +96,38 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView {
     @Override
     public void getLocation(int left, int right, int top, int bottom) {
         observeChessmans(left, right, top, bottom);
+    }
+
+    @Override
+    public void showMenu() {
+        showPopup();
+    }
+
+    public void showPopup() {
+        Context colorContext= new ContextThemeWrapper(getActivity(), R.style.PopupMenu);
+        popupMenu = new PopupMenu(colorContext, mBinding.buttonMenu);
+        popupMenu.getMenuInflater().inflate(R.menu.menu_play_chess, popupMenu.getMenu());
+        setClickMenu();
+        popupMenu.show();
+    }
+
+    public void setClickMenu() {
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                switch (item.getItemId()) {
+                    case R.id.item_return:
+                        Toast.makeText(getActivity(), "return", Toast.LENGTH_SHORT).show();
+                        return true;
+                    case R.id.item_new_game:
+                        Toast.makeText(getActivity(), "new_game", Toast.LENGTH_SHORT).show();
+                        return true;
+                    case R.id.item_guide:
+                        Toast.makeText(getActivity(), "guide", Toast.LENGTH_SHORT).show();
+                        return true;
+                }
+                return false;
+            }
+        });
     }
 }

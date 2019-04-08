@@ -1,11 +1,14 @@
 package com.hungth.cotoan.screen.home;
 
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +33,9 @@ import com.hungth.cotoan.databinding.LayoutSettingMainBinding;
 import com.hungth.cotoan.databinding.LayoutSettingManVsComBinding;
 import com.hungth.cotoan.databinding.LayoutSettingManVsManBinding;
 import com.hungth.cotoan.screen.base.BaseFragment;
+import com.hungth.cotoan.screen.play_man_vs_man.PlayWithFriendFragment;
 import com.hungth.cotoan.utils.Constant;
+import com.hungth.cotoan.utils.common.FragmentTransactionUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -358,7 +363,12 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
 
     @Override
     public void agreeManVsMan() {
-
+        dialogSettingManVsMan.dismiss();
+        FragmentTransactionUtils.addFragment(getActivity().getSupportFragmentManager(),
+                PlayWithFriendFragment.getInstance(),
+                R.id.main_frame,
+                PlayWithFriendFragment.TAG,
+                true);
     }
 
     @Override
@@ -563,5 +573,21 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
     public void doneSetting() {
         dialogSettingHome.dismiss();
         initDialogSettingMain();
+    }
+
+
+    public void showDialogConfirmExit() {
+
+        new AlertDialog.Builder(getActivity())
+                .setTitle("Information")
+                .setMessage("Do you wish to exit from Menu Screen?")
+                .setPositiveButton("No", null)
+                .setNegativeButton("Yes",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+
+                            }
+                        }).create().show();
     }
 }
