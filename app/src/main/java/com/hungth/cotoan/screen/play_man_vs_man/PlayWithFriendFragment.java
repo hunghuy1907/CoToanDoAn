@@ -1,7 +1,7 @@
 package com.hungth.cotoan.screen.play_man_vs_man;
 
-import android.arch.lifecycle.Observer;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,20 +23,30 @@ import com.hungth.cotoan.data.repository.ChessManRepository;
 import com.hungth.cotoan.data.resource.local.ChessmanLocalDataSource;
 import com.hungth.cotoan.databinding.FragmentPlayWithFriendBinding;
 import com.hungth.cotoan.screen.base.BaseFragment;
+import com.hungth.cotoan.screen.home.HomeFragment;
+import com.hungth.cotoan.screen.home.OnSettingChess;
 import com.hungth.cotoan.utils.Constant;
 
 import java.util.List;
 
-public class PlayWithFriendFragment extends BaseFragment implements IGameView {
+import static android.content.Context.MODE_PRIVATE;
+
+public class PlayWithFriendFragment extends BaseFragment implements IGameView, OnSettingChess.OnManVsMan {
     public static String TAG = PlayWithFriendFragment.class.getSimpleName();
+    private static PlayWithFriendFragment sInstance;
     private FragmentPlayWithFriendBinding mBinding;
     private PlayWithFriendViewModel mViewModel;
     private static int left, right, top, bottom;
     private DrawView drawView;
     private PopupMenu popupMenu;
+    private String point, time, goFirst;
+    private boolean isAdd, isSub, ismulti, isDiv;
 
     public static PlayWithFriendFragment getInstance() {
-        return new PlayWithFriendFragment();
+        if (sInstance == null) {
+            sInstance = new PlayWithFriendFragment();
+        }
+        return sInstance;
     }
 
     @Nullable
@@ -54,6 +64,7 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView {
         mViewModel = new PlayWithFriendViewModel(this, ChessManRepository.getInstance(ChessmanLocalDataSource.getInstance(getActivity())));
         mBinding.setViewModel(mViewModel);
         initChess(this);
+        getInfor();
     }
 
 
@@ -68,6 +79,45 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView {
                 iGameView.getLocation(left, right, top, bottom);
             }
         });
+    }
+
+    public void getInfor() {
+        SharedPreferences prefs = getActivity().getSharedPreferences(Constant.INFORMATION, MODE_PRIVATE);
+        String name = prefs.getString(Constant.NAME, "name");
+        String view = prefs.getString(Constant.VIEW, "view");
+        mBinding.imageAvatar1.setProfileId(view);
+        mBinding.textName1.setText(name);
+        mBinding.textPoint.setText("Điểm: 0/" + point);
+        mBinding.textPoint2.setText("Điểm: 0/" + point);
+        if (goFirst.equals("XANH")) {
+            drawView.setBlueMove(true);
+        } else {
+            drawView.setBlueMove(false);
+        }
+
+        if (isAdd) {
+            mBinding.imageAdd.setBackgroundResource(R.drawable.pp_cong_chon);
+        } else {
+            mBinding.imageAdd.setBackgroundResource(R.drawable.pp_cong_ko_chon);
+        }
+
+        if (isSub) {
+            mBinding.imageSub.setBackgroundResource(R.drawable.pp_tru_chon);
+        } else {
+            mBinding.imageSub.setBackgroundResource(R.drawable.pp_tru_ko_chon);
+        }
+
+        if (ismulti) {
+            mBinding.imageMulti.setBackgroundResource(R.drawable.pp_nhan_chon);
+        } else {
+            mBinding.imageMulti.setBackgroundResource(R.drawable.pp_nhan_ko_chon);
+        }
+
+        if (isDiv) {
+            mBinding.imageDivision.setBackgroundResource(R.drawable.pp_chia_chon);
+        } else {
+            mBinding.imageDivision.setBackgroundResource(R.drawable.pp_chia_ko_chon);
+        }
     }
 
     private void observeChessmans(int left, int right, int top, int bottom) {
@@ -116,5 +166,20 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView {
                 return false;
             }
         });
+    }
+
+    @Override
+    public void getSettingManVsMan(String goFirst, String point, String time) {
+        this.goFirst = goFirst;
+        this.time = time;
+        this.point = point;
+    }
+
+    @Override
+    public void getcalculatorManVsMan(boolean isAdd, boolean isSub, boolean isMulti, boolean isDiv) {
+        this.isAdd = isAdd;
+        this.isDiv = isDiv;
+        this.ismulti = isMulti;
+        this.isSub = isSub;
     }
 }

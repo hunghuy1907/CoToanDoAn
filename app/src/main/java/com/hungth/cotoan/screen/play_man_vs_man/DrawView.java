@@ -23,7 +23,7 @@ public class DrawView extends View {
     private ChessBoard chessBoardClick;
     private List<Integer> stackChessBoards = new ArrayList<>();
     private int position;
-    private boolean isBlueMove = false;
+    private boolean isBlueMove = true;
     private List<Integer> moves = new ArrayList<>();
     private List<Integer> chessmanCanEats = new ArrayList<>();
     private Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(),
@@ -35,6 +35,14 @@ public class DrawView extends View {
 
     public void setChessBoardList(List<ChessBoard> chessBoardList) {
         this.chessBoardList = chessBoardList;
+    }
+
+    public boolean isBlueMove() {
+        return isBlueMove;
+    }
+
+    public void setBlueMove(boolean blueMove) {
+        isBlueMove = blueMove;
     }
 
     @Override

@@ -9,9 +9,11 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.hungth.cotoan.R;
 import com.hungth.cotoan.screen.home.HomeFragment;
+import com.hungth.cotoan.utils.Constant;
 import com.hungth.cotoan.utils.common.FragmentTransactionUtils;
 
 import java.security.MessageDigest;
@@ -65,4 +67,12 @@ public class MainActivity extends AppCompatActivity {
                 .setNegativeButton("Không", null)
                 .show();
     }
+
+//    public void getSettingManVsMan() {
+//        Bundle bundle = getArguments();
+//        if (bundle != null) {
+//            String point = bundle.getString(Constant.POINT_MAN_MAN);
+//            Toast.makeText(getActivity(), ""+ point, Toast.LENGTH_SHORT).show();
+//        }
+//    }
 }

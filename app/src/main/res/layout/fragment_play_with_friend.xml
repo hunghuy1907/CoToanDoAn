@@ -38,7 +38,6 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:src="@drawable/pp_chia_chon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -47,7 +46,6 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginTop="8dp"
-            android:src="@drawable/pp_nhan_chon"
             app:layout_constraintEnd_toStartOf="@+id/imageDivision"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -56,16 +54,14 @@
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginTop="8dp"
-            android:src="@drawable/pp_tru_chon"
             app:layout_constraintEnd_toStartOf="@+id/imageMulti"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/image"
+            android:id="@+id/imageAdd"
             android:layout_width="25dp"
             android:layout_height="25dp"
             android:layout_marginTop="8dp"
-            android:src="@drawable/pp_cong_chon"
             app:layout_constraintEnd_toStartOf="@+id/imageSub"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -124,7 +120,7 @@
                     app:layout_constraintStart_toEndOf="@+id/imageAvatar_1"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
+                <com.facebook.login.widget.ProfilePictureView
                     android:id="@+id/imageAvatar_1"
                     android:layout_width="40dp"
                     android:layout_height="50dp"

@@ -3,6 +3,7 @@ package com.hungth.cotoan.screen.home;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -14,12 +15,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.Profile;
 import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
@@ -42,10 +45,14 @@ import org.json.JSONObject;
 
 import java.util.Arrays;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class HomeFragment extends BaseFragment implements PlayChess, SettingPlayChess {
+    private static final String FIRST = "first";
+
     public static String TAG = HomeFragment.class.getSimpleName();
+    public static HomeFragment sInstance;
     private FragmentHomeBinding binding;
     private LayoutSettingManVsManBinding bindingSetting;
     private LayoutSettingManVsComBinding manVsComBinding;
@@ -59,6 +66,16 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
     private Dialog dialogSettingManVsCom;
     private Dialog dialogPlayOnlline;
     private Dialog dialogSettingHome;
+    private boolean isFirst;
+    private OnSettingChess.OnManVsMan onSetttingManVsMan;
+    private boolean isAdd = true, isSub = true, isMulti = true, isDiv = true;
+
+    public static HomeFragment getInstance() {
+        if (sInstance == null) {
+            sInstance = new HomeFragment();
+        }
+        return sInstance;
+    }
 
     @Nullable
     @Override
@@ -82,10 +99,10 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
                 , this);
         binding.setViewModel(viewModel);
         initData();
-    }
-
-    public static HomeFragment getInstance() {
-        return new HomeFragment();
+        if (getFirstlogin()) {
+            loginResult();
+            isFirst = false;
+        }
     }
 
     public void initData() {
@@ -97,7 +114,9 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
-                loginResult(loginResult);
+                loginResult();
+                isFirst = true;
+                saveFirstLogin();
             }
 
             @Override
@@ -117,30 +136,44 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
         initDialogSettingMain();
     }
 
-    public void loginResult(LoginResult loginResult) {
-        GraphRequest graphRequest = GraphRequest.newMeRequest(loginResult.getAccessToken(),
+    public void loginResult() {
+        GraphRequest graphRequest = GraphRequest.newMeRequest(AccessToken.getCurrentAccessToken(),
                 new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject object, GraphResponse response) {
-                        System.out.println("---->>>JSON: " + response.toString());
                         try {
-                            String email = object.getString("email");
-                            String birthday = object.getString("birthday");
-                            String id = object.getString("id");
-                            System.out.println("");
+                            String name = object.getString("name");
+                            String view = Profile.getCurrentProfile().getId();
+                            saveInfor(name, view);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
                     }
                 });
         loginButton.setVisibility(View.INVISIBLE);
-        System.out.println("---->>> success: ");
         Bundle parameters = new Bundle();
         parameters.putString("fields", "id,name,email");
         graphRequest.setParameters(parameters);
         graphRequest.executeAsync();
     }
 
+    public void saveInfor(String name, String view) {
+        SharedPreferences.Editor editor = getActivity().getSharedPreferences(Constant.INFORMATION, MODE_PRIVATE).edit();
+        editor.putString(Constant.NAME, name);
+        editor.putString(Constant.VIEW, view);
+        editor.apply();
+    }
+
+    public void saveFirstLogin() {
+        SharedPreferences.Editor editor = getActivity().getSharedPreferences(FIRST, MODE_PRIVATE).edit();
+        editor.putBoolean(Constant.IS_FIRST, isFirst);
+        editor.apply();
+    }
+
+    public boolean getFirstlogin() {
+        SharedPreferences prefs = getActivity().getSharedPreferences(FIRST, MODE_PRIVATE);
+        return prefs.getBoolean(Constant.IS_FIRST, false);
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -218,6 +251,15 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
         dialogSettingHome.getWindow().setLayout(width, height);
     }
 
+    private void getSetting() {
+        String goFirst = bindingSetting.textGoFirst.getText().toString();
+        String point = bindingSetting.textPoint.getText().toString();
+        String time = bindingSetting.textTime.getText().toString();
+        onSetttingManVsMan = PlayWithFriendFragment.getInstance();
+        onSetttingManVsMan.getcalculatorManVsMan(isAdd, isSub, isMulti, isDiv);
+        onSetttingManVsMan.getSettingManVsMan(goFirst, point, time);
+    }
+
 
     // home
 
@@ -292,9 +334,11 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
         switch (type) {
             case CalculatorType.INVISIBLE:
                 bindingSetting.buttonPlus.setBackgroundResource(R.drawable.pp_cong_ko_chon);
+                isAdd = false;
                 break;
             case CalculatorType.VISIBLE:
                 bindingSetting.buttonPlus.setBackgroundResource(R.drawable.pp_cong_chon);
+                isAdd = true;
         }
     }
 
@@ -303,9 +347,11 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
         switch (type) {
             case CalculatorType.INVISIBLE:
                 bindingSetting.buttonSub.setBackgroundResource(R.drawable.pp_tru_ko_chon);
+                isSub = false;
                 break;
             case CalculatorType.VISIBLE:
                 bindingSetting.buttonSub.setBackgroundResource(R.drawable.pp_tru_chon);
+                isSub = true;
         }
     }
 
@@ -314,9 +360,11 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
         switch (type) {
             case CalculatorType.INVISIBLE:
                 bindingSetting.buttonMulti.setBackgroundResource(R.drawable.pp_nhan_ko_chon);
+                isMulti = false;
                 break;
             case CalculatorType.VISIBLE:
                 bindingSetting.buttonMulti.setBackgroundResource(R.drawable.pp_nhan_chon);
+                isMulti = true;
         }
     }
 
@@ -325,9 +373,11 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
         switch (type) {
             case CalculatorType.INVISIBLE:
                 bindingSetting.buttonDivision.setBackgroundResource(R.drawable.pp_chia_ko_chon);
+                isDiv = false;
                 break;
             case CalculatorType.VISIBLE:
                 bindingSetting.buttonDivision.setBackgroundResource(R.drawable.pp_chia_chon);
+                isDiv = true;
         }
 
     }
@@ -369,6 +419,8 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
                 R.id.main_frame,
                 PlayWithFriendFragment.TAG,
                 true);
+        PlayWithFriendFragment.getInstance();
+        getSetting();
     }
 
     @Override
