@@ -87,14 +87,29 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView, O
         String view = prefs.getString(Constant.VIEW, "view");
         mBinding.imageAvatar1.setProfileId(view);
         mBinding.textName1.setText(name);
-        mBinding.textPoint.setText("Điểm: 0/" + point);
-        mBinding.textPoint2.setText("Điểm: 0/" + point);
+        mBinding.textPoint.setText(("Điểm:" +  drawView.getTotalPointRed() + "/" + point));
+        mBinding.textPoint2.setText(("Điểm:" +  drawView.getTotalPointBlue() + "/" + point));
         if (goFirst.equals("XANH")) {
             drawView.setBlueMove(true);
         } else {
             drawView.setBlueMove(false);
         }
+        setBackgroundIconCal();
+        drawView.setAdd(isAdd);
+        drawView.setSub(isSub);
+        drawView.setMulti(ismulti);
+        drawView.setDiv(isDiv);
+        drawView.setPoint(Integer.valueOf(point));
+        drawView.setTime(Integer.valueOf(time));
 
+        if (drawView.isBlueMove()) {
+            Toast.makeText(getActivity(), "Xanh đi trước", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity(), "Đỏ đi trước", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    public void setBackgroundIconCal() {
         if (isAdd) {
             mBinding.imageAdd.setBackgroundResource(R.drawable.pp_cong_chon);
         } else {

@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.hungth.cotoan.R;
 import com.hungth.cotoan.data.model.ChessBoard;
@@ -20,6 +21,8 @@ public class DrawView extends View {
 
     public static List<ChessBoard> newBoard = new ArrayList<>();
     private List<ChessBoard> chessBoardList;
+    private List<ChessBoard> chessBoardRedAte = new ArrayList<>();
+    private List<ChessBoard> chessBoardBlueAte = new ArrayList<>();
     private ChessBoard chessBoardClick;
     private List<Integer> stackChessBoards = new ArrayList<>();
     private int position;
@@ -28,6 +31,8 @@ public class DrawView extends View {
     private List<Integer> chessmanCanEats = new ArrayList<>();
     private Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(),
             R.drawable.guide_60);
+    private boolean isAdd = true, isSub = true, isMulti = true, isDiv = true;
+    private int time, point;
 
     public DrawView(Context context) {
         super(context);
@@ -37,12 +42,36 @@ public class DrawView extends View {
         this.chessBoardList = chessBoardList;
     }
 
-    public boolean isBlueMove() {
-        return isBlueMove;
+    public void setAdd(boolean add) {
+        isAdd = add;
+    }
+
+    public void setSub(boolean sub) {
+        isSub = sub;
+    }
+
+    public void setMulti(boolean multi) {
+        isMulti = multi;
+    }
+
+    public void setDiv(boolean div) {
+        isDiv = div;
     }
 
     public void setBlueMove(boolean blueMove) {
         isBlueMove = blueMove;
+    }
+
+    public boolean isBlueMove() {
+        return isBlueMove;
+    }
+
+    public void setTime(int time) {
+        this.time = time;
+    }
+
+    public void setPoint(int point) {
+        this.point = point;
     }
 
     @Override
@@ -111,11 +140,66 @@ public class DrawView extends View {
         return true;
     }
 
+    public void addListAte(ChessBoard chessBoard) {
+        if (chessBoard.getChessMan() != null) {
+            int type = chessBoard.getChessMan().getmType();
+            if (type == Constant.RED_NUMBER || type == Constant.RED_DOT) {
+                chessBoardRedAte.add(chessBoard);
+            } else {
+                chessBoardBlueAte.add(chessBoard);
+            }
+            checkWin();
+        }
+    }
+
+    public int getTotalPointRed() {
+        int sum = 0;
+        for (int i = 0; i < chessBoardRedAte.size(); i++) {
+            sum = sum + chessBoardRedAte.get(i).getChessMan().getValue();
+        }
+        return sum;
+    }
+
+    public int getTotalPointBlue() {
+        int sum = 0;
+        for (int i = 0; i < chessBoardBlueAte.size(); i++) {
+            sum = sum + chessBoardBlueAte.get(i).getChessMan().getValue();
+        }
+        return sum;
+    }
+    
+    public void confirmWin() {
+        Toast.makeText(getContext(), "Chiến thắng", Toast.LENGTH_SHORT).show();
+    }
+
+    public void checkWin() {
+        for (int i = 0; i < chessBoardRedAte.size(); i++) {
+            if (chessBoardRedAte.get(i).getChessMan().getValue() == 0) {
+                confirmWin();
+            }
+        }
+
+        for (int i = 0; i < chessBoardBlueAte.size(); i++) {
+            if (chessBoardBlueAte.get(i).getChessMan().getValue() == 0) {
+                confirmWin();
+            }
+        }
+
+        if (getTotalPointBlue() >= point) {
+            confirmWin();
+        }
+
+        if (getTotalPointRed() >= point) {
+            confirmWin();
+        }
+    }
+
     private void moveChessman() {
         int numberNull = stackChessBoards.get(stackChessBoards.size() - 1);
         int numberChess = stackChessBoards.get(stackChessBoards.size() - 2);
         stackChessBoards.clear();
         if (moves.contains(numberNull) && chessBoardList.get(numberChess).getChessMan() != null) {
+            addListAte(chessBoardList.get(numberNull));
             Bitmap bitmap = chessBoardList.get(numberChess).getChessMan().getmBitmap();
             int value = chessBoardList.get(numberChess).getChessMan().getValue();
             int type = chessBoardList.get(numberChess).getChessMan().getmType();
@@ -385,11 +469,22 @@ public class DrawView extends View {
     }
 
     public boolean checkEat(int valueClick, int valueNext, int totalChessboardToEnermy) {
-        if (valueClick - valueNext == totalChessboardToEnermy)
+        if (valueClick - valueNext == totalChessboardToEnermy && isSub)
             return true;
         int valueAdd = (valueClick + valueNext) >= 10 ?
                 (valueClick + valueNext) % 10 : (valueClick + valueNext);
-        if (valueAdd == totalChessboardToEnermy)
+        if (valueAdd == totalChessboardToEnermy && isAdd)
+            return true;
+
+        if (valueClick > valueNext && valueNext != 0) {
+            int valueDiv = valueClick / valueNext;
+            if (valueDiv == totalChessboardToEnermy && isDiv)
+                return true;
+        }
+
+        int valueMulti = (valueClick * valueNext) >= 10 ?
+                (valueClick * valueNext) - ((valueClick * valueNext) / 10) * 10 : (valueClick * valueNext);
+        if (valueMulti == totalChessboardToEnermy && valueMulti != 0 && isMulti)
             return true;
         return false;
     }
@@ -473,12 +568,12 @@ public class DrawView extends View {
                     if (!checkSameType(chessBoard.getChessMan(), chessBoardClick.getChessMan())) {
                         return i - 1;
                     } else {
-                        return 0;
+                        return -1;
                     }
                 }
             }
         }
-        return 0;
+        return -1;
     }
 
     public int getTotalChessboardCrossLeftTop(int valueClick, int valueNext) {
