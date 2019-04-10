@@ -7,6 +7,7 @@ import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
@@ -67,12 +68,4 @@ public class MainActivity extends AppCompatActivity {
                 .setNegativeButton("Không", null)
                 .show();
     }
-
-//    public void getSettingManVsMan() {
-//        Bundle bundle = getArguments();
-//        if (bundle != null) {
-//            String point = bundle.getString(Constant.POINT_MAN_MAN);
-//            Toast.makeText(getActivity(), ""+ point, Toast.LENGTH_SHORT).show();
-//        }
-//    }
 }

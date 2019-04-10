@@ -7,7 +7,6 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
 import com.hungth.cotoan.R;
 import com.hungth.cotoan.data.model.ChessBoard;
@@ -21,8 +20,8 @@ public class DrawView extends View {
 
     public static List<ChessBoard> newBoard = new ArrayList<>();
     private List<ChessBoard> chessBoardList;
-    private List<ChessBoard> chessBoardRedAte = new ArrayList<>();
-    private List<ChessBoard> chessBoardBlueAte = new ArrayList<>();
+    private List<Integer> chessBoardRedAte = new ArrayList<>();
+    private List<Integer> chessBoardBlueAte = new ArrayList<>();
     private ChessBoard chessBoardClick;
     private List<Integer> stackChessBoards = new ArrayList<>();
     private int position;
@@ -33,9 +32,11 @@ public class DrawView extends View {
             R.drawable.guide_60);
     private boolean isAdd = true, isSub = true, isMulti = true, isDiv = true;
     private int time, point;
+    private IGameView iGameView;
 
-    public DrawView(Context context) {
+    public DrawView(Context context, IGameView iGameView) {
         super(context);
+        this.iGameView = iGameView;
     }
 
     public void setChessBoardList(List<ChessBoard> chessBoardList) {
@@ -142,11 +143,16 @@ public class DrawView extends View {
 
     public void addListAte(ChessBoard chessBoard) {
         if (chessBoard.getChessMan() != null) {
+            int value = chessBoard.getChessMan().getValue();
             int type = chessBoard.getChessMan().getmType();
             if (type == Constant.RED_NUMBER || type == Constant.RED_DOT) {
-                chessBoardRedAte.add(chessBoard);
+                chessBoardRedAte.add(value);
+                iGameView.sendValueEnermyAte(chessBoardRedAte, chessBoard.getChessMan().getmType(),
+                        getTotalPointRed());
             } else {
-                chessBoardBlueAte.add(chessBoard);
+                chessBoardBlueAte.add(value);
+                iGameView.sendValueEnermyAte(chessBoardBlueAte, chessBoard.getChessMan().getmType(),
+                        getTotalPointBlue());
             }
             checkWin();
         }
@@ -155,7 +161,7 @@ public class DrawView extends View {
     public int getTotalPointRed() {
         int sum = 0;
         for (int i = 0; i < chessBoardRedAte.size(); i++) {
-            sum = sum + chessBoardRedAte.get(i).getChessMan().getValue();
+            sum = sum + chessBoardRedAte.get(i);
         }
         return sum;
     }
@@ -163,34 +169,30 @@ public class DrawView extends View {
     public int getTotalPointBlue() {
         int sum = 0;
         for (int i = 0; i < chessBoardBlueAte.size(); i++) {
-            sum = sum + chessBoardBlueAte.get(i).getChessMan().getValue();
+            sum = sum + chessBoardBlueAte.get(i);
         }
         return sum;
-    }
-    
-    public void confirmWin() {
-        Toast.makeText(getContext(), "Chiến thắng", Toast.LENGTH_SHORT).show();
     }
 
     public void checkWin() {
         for (int i = 0; i < chessBoardRedAte.size(); i++) {
-            if (chessBoardRedAte.get(i).getChessMan().getValue() == 0) {
-                confirmWin();
+            if (chessBoardRedAte.get(i) == 0) {
+                iGameView.showConfirmWin("ĐỎ");
             }
         }
 
         for (int i = 0; i < chessBoardBlueAte.size(); i++) {
-            if (chessBoardBlueAte.get(i).getChessMan().getValue() == 0) {
-                confirmWin();
+            if (chessBoardBlueAte.get(i) == 0) {
+                iGameView.showConfirmWin("XANH");
             }
         }
 
         if (getTotalPointBlue() >= point) {
-            confirmWin();
+            iGameView.showConfirmWin("XANH");
         }
 
         if (getTotalPointRed() >= point) {
-            confirmWin();
+            iGameView.showConfirmWin("ĐỎ");
         }
     }
 

@@ -1,11 +1,13 @@
 package com.hungth.cotoan.screen.play_man_vs_man;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -26,6 +28,7 @@ import com.hungth.cotoan.screen.base.BaseFragment;
 import com.hungth.cotoan.screen.home.HomeFragment;
 import com.hungth.cotoan.screen.home.OnSettingChess;
 import com.hungth.cotoan.utils.Constant;
+import com.hungth.cotoan.utils.common.FragmentTransactionUtils;
 
 import java.util.List;
 
@@ -53,7 +56,7 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView, O
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = DataBindingUtil.inflate(inflater, R.layout.fragment_play_with_friend, container, false);
-        drawView = new DrawView(getActivity());
+        drawView = new DrawView(getActivity(), this);
         mBinding.contrainLayoutBoard.addView(drawView);
         return mBinding.getRoot();
     }
@@ -87,8 +90,9 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView, O
         String view = prefs.getString(Constant.VIEW, "view");
         mBinding.imageAvatar1.setProfileId(view);
         mBinding.textName1.setText(name);
-        mBinding.textPoint.setText(("Điểm:" +  drawView.getTotalPointRed() + "/" + point));
-        mBinding.textPoint2.setText(("Điểm:" +  drawView.getTotalPointBlue() + "/" + point));
+        mBinding.progressBar1.setMax(Integer.valueOf(point));
+        mBinding.progressBar2.setMax(Integer.valueOf(point));
+
         if (goFirst.equals("XANH")) {
             drawView.setBlueMove(true);
         } else {
@@ -154,8 +158,136 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView, O
         showPopup();
     }
 
+    @Override
+    public void showConfirmWin(String win) {
+        new AlertDialog.Builder(getActivity())
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Thông báo")
+                .setMessage("Bên " + win + " thắng, bạn có muốn chơi tiếp không")
+                .setCancelable(false)
+                .setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        drawView.newGame();
+                    }
+
+                })
+                .setNegativeButton("Không", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        FragmentTransactionUtils.addFragment(getActivity().getSupportFragmentManager(),
+                                HomeFragment.getInstance(), R.id.main_frame, HomeFragment.TAG, false);
+                    }
+                })
+                .show();
+    }
+
+    @Override
+    public void sendValueEnermyAte(List<Integer> values, int type, int sum) {
+        setbackgroundForListAte(values, type);
+        settotalPointAndProgressbar(sum, type);
+    }
+
+    public void settotalPointAndProgressbar(int sum, int type) {
+        if (type == Constant.BLUE_DOT || type == Constant.BLUE_NUMBER) {
+            if (sum < Integer.valueOf(point)) {
+                mBinding.textPoint2.setText(("Điểm: 0" + sum + "/" + point));
+            } else {
+                mBinding.textPoint2.setText(("Điểm:" + sum + "/" + point));
+            }
+            mBinding.progressBar2.setProgress(sum);
+        } else {
+            if (sum < Integer.valueOf(point)) {
+                mBinding.textPoint.setText(("Điểm: 0" + sum + "/" + point));
+            } else {
+                mBinding.textPoint.setText(("Điểm:" + sum + "/" + point));
+            }
+            mBinding.progressBar1.setProgress(sum);
+        }
+    }
+
+    public void setbackgroundForListAte(List<Integer> values, int type) {
+        if (type == Constant.BLUE_DOT || type == Constant.BLUE_NUMBER) {
+            setBackgroundBlueEat(values);
+        } else {
+            setBackgroundRedEat(values);
+        }
+    }
+
+    private void setBackgroundRedEat(List<Integer> values) {
+        for (int i = 0; i < values.size(); i++) {
+            switch (values.get(i)) {
+                case 1:
+                    mBinding.imageEat0Man1.setBackgroundResource(R.drawable.ic_an_quan_true_1);
+                    break;
+                case 2:
+                    mBinding.imageEat1Man1.setBackgroundResource(R.drawable.ic_an_quan_true_2);
+                    break;
+                case 3:
+                    mBinding.imageEat2Man1.setBackgroundResource(R.drawable.ic_an_quan_true_3);
+                    break;
+                case 4:
+                    mBinding.imageEat3Man1.setBackgroundResource(R.drawable.ic_an_quan_true_4);
+                    break;
+                case 5:
+                    mBinding.imageEat4Man1.setBackgroundResource(R.drawable.ic_an_quan_true_5);
+                    break;
+                case 6:
+                    mBinding.imageEat5Man1.setBackgroundResource(R.drawable.ic_an_quan_true_6);
+                    break;
+                case 7:
+                    mBinding.imageEat6Man1.setBackgroundResource(R.drawable.ic_an_quan_true_7);
+                    break;
+                case 8:
+                    mBinding.imageEat7Man1.setBackgroundResource(R.drawable.ic_an_quan_true_8);
+                    break;
+                case 9:
+                    mBinding.imageEat8Man1.setBackgroundResource(R.drawable.ic_an_quan_true_9);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    private void setBackgroundBlueEat(List<Integer> values) {
+        for (int i = 0; i < values.size(); i++) {
+            switch (values.get(i)) {
+                case 1:
+                    mBinding.imageEat0Man2.setBackgroundResource(R.drawable.ic_an_quan_true_1);
+                    break;
+                case 2:
+                    mBinding.imageEat1Man2.setBackgroundResource(R.drawable.ic_an_quan_true_2);
+                    break;
+                case 3:
+                    mBinding.imageEat2Man2.setBackgroundResource(R.drawable.ic_an_quan_true_3);
+                    break;
+                case 4:
+                    mBinding.imageEat3Man2.setBackgroundResource(R.drawable.ic_an_quan_true_4);
+                    break;
+                case 5:
+                    mBinding.imageEat4Man2.setBackgroundResource(R.drawable.ic_an_quan_true_5);
+                    break;
+                case 6:
+                    mBinding.imageEat5Man2.setBackgroundResource(R.drawable.ic_an_quan_true_6);
+                    break;
+                case 7:
+                    mBinding.imageEat6Man2.setBackgroundResource(R.drawable.ic_an_quan_true_7);
+                    break;
+                case 8:
+                    mBinding.imageEat7Man2.setBackgroundResource(R.drawable.ic_an_quan_true_8);
+                    break;
+                case 9:
+                    mBinding.imageEat8Man2.setBackgroundResource(R.drawable.ic_an_quan_true_9);
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
     public void showPopup() {
-        Context colorContext= new ContextThemeWrapper(getActivity(), R.style.PopupMenu);
+        Context colorContext = new ContextThemeWrapper(getActivity(), R.style.PopupMenu);
         popupMenu = new PopupMenu(colorContext, mBinding.buttonMenu);
         popupMenu.getMenuInflater().inflate(R.menu.menu_play_chess, popupMenu.getMenu());
         setClickMenu();
