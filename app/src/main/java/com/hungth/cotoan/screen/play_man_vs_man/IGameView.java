@@ -11,4 +11,6 @@ public interface IGameView {
 
     void sendValueEnermyAte(List<Integer> values, int type, int sum);
 
+    void sendTurn(boolean isBlueMove);
+
 }

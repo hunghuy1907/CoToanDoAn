@@ -4,7 +4,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
@@ -90,8 +93,8 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView, O
         String view = prefs.getString(Constant.VIEW, "view");
         mBinding.imageAvatar1.setProfileId(view);
         mBinding.textName1.setText(name);
-        mBinding.progressBar1.setMax(Integer.valueOf(point));
-        mBinding.progressBar2.setMax(Integer.valueOf(point));
+        mBinding.progressBar1.setMax(Integer.valueOf(time)*1000);
+        mBinding.progressBar2.setMax(Integer.valueOf(time)*1000);
 
         if (goFirst.equals("XANH")) {
             drawView.setBlueMove(true);
@@ -186,6 +189,52 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView, O
     public void sendValueEnermyAte(List<Integer> values, int type, int sum) {
         setbackgroundForListAte(values, type);
         settotalPointAndProgressbar(sum, type);
+    }
+
+    @Override
+    public void sendTurn(boolean isBlueMove) {
+//        if (isBlueMove) {
+//            mBinding.progressBar1.setVisibility(View.INVISIBLE);
+//            mBinding.progressBar2.setVisibility(View.VISIBLE);
+//            setValueProgressBar1();
+//        } else {
+//            mBinding.progressBar1.setVisibility(View.VISIBLE);
+//            mBinding.progressBar2.setVisibility(View.INVISIBLE);
+//
+//            setValueProgressBar2();
+//        }
+    }
+
+    private void setValueProgressBar2() {
+        mBinding.progressBar2.setProgress(60000);
+        new CountDownTimer(Integer.valueOf(time) * 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                int current = mBinding.progressBar1.getProgress();
+                mBinding.progressBar2.setProgress(current - 100);
+            }
+
+            @Override
+            public void onFinish() {
+                mBinding.progressBar2.setVisibility(View.INVISIBLE);
+            }
+        }.start();
+    }
+
+    private void setValueProgressBar1() {
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                for (int i = 60; i >= 0; i--) {
+//                    mBinding.progressBar2.setProgress(i);
+//                    try {
+//                        Thread.sleep(1000);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//        }).start();
     }
 
     public void settotalPointAndProgressbar(int sum, int type) {

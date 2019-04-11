@@ -214,6 +214,7 @@ public class DrawView extends View {
             } else {
                 isBlueMove = true;
             }
+            iGameView.sendTurn(isBlueMove);
             moves.clear();
             invalidate();
         }

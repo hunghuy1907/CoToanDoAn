@@ -19,9 +19,9 @@ public class GetChessmanFromDrawable {
     }
 
     public static final int[] CHESSMAN_RED_DOT = {
-            R.drawable.cham_do_0, R.drawable.cham_do_1, R.drawable.cham_do_2, R.drawable.cham_do_3,
-            R.drawable.cham_do_4, R.drawable.cham_do_5, R.drawable.cham_do_6, R.drawable.cham_do_7,
-            R.drawable.cham_do_8, R.drawable.cham_do_9
+            R.drawable.cham_do_0, R.drawable.cham_do_9, R.drawable.cham_do_8, R.drawable.cham_do_7,
+            R.drawable.cham_do_6, R.drawable.cham_do_5, R.drawable.cham_do_4, R.drawable.cham_do_3,
+            R.drawable.cham_do_2, R.drawable.cham_do_1
     };
 
     public static final int[] CHESSMAN_BLUE_DOT = {
@@ -32,9 +32,9 @@ public class GetChessmanFromDrawable {
     };
 
     public static final int[] CHESSMAN_RED_NUMBER = {
-            R.drawable.so_do_0, R.drawable.so_do_1, R.drawable.so_do_2, R.drawable.so_do_3,
-            R.drawable.so_do_4, R.drawable.so_do_5, R.drawable.so_do_6, R.drawable.so_do_7,
-            R.drawable.so_do_8, R.drawable.so_do_9
+            R.drawable.so_do_0, R.drawable.so_do_9, R.drawable.so_do_8, R.drawable.so_do_7,
+            R.drawable.so_do_6, R.drawable.so_do_5, R.drawable.so_do_4, R.drawable.so_do_3,
+            R.drawable.so_do_2, R.drawable.so_do_1
     };
 
     public static final int[] CHESSMAN_BLUE_NUMBER = {
@@ -68,7 +68,7 @@ public class GetChessmanFromDrawable {
             }
             chessManReds.add(
                     new ChessMan(leftChessman, rightChessman, topChessman, bottomChessman, bitmap,
-                            type, i));
+                            type, 10 - i));
         }
 
         return chessManReds;
