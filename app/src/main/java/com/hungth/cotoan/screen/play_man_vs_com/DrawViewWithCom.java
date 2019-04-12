@@ -1,4 +1,4 @@
-package com.hungth.cotoan.screen.play_man_vs_man;
+package com.hungth.cotoan.screen.play_man_vs_com;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -16,7 +16,7 @@ import com.hungth.cotoan.utils.Constant;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DrawView extends View {
+public class DrawViewWithCom extends View {
 
     public static List<ChessBoard> newBoard = new ArrayList<>();
     private List<ChessBoard> chessBoardList;
@@ -32,9 +32,9 @@ public class DrawView extends View {
             R.drawable.guide_60);
     private boolean isAdd = true, isSub = true, isMulti = true, isDiv = true;
     private int time, point;
-    private IGameView iGameView;
+    private IGameViewWithCom iGameView;
 
-    public DrawView(Context context, IGameView iGameView) {
+    public DrawViewWithCom(Context context, IGameViewWithCom iGameView) {
         super(context);
         this.iGameView = iGameView;
     }
@@ -80,28 +80,6 @@ public class DrawView extends View {
         super.onDraw(canvas);
         drawChess(canvas);
         drawGuide(canvas);
-    }
-
-    public String convertChessboardToString() {
-        String chessboard = new String();
-        for (int i = 0; i < chessBoardList.size(); i++) {
-            ChessMan chessMan = chessBoardList.get(i).getChessMan();
-            String type;
-            String value;
-            if (chessMan == null) {
-                type = "0";
-                value = "0";
-            } else {
-                if (chessMan.getmType() == Constant.BLUE_NUMBER || chessMan.getmType() == Constant.BLUE_DOT) {
-                    type = "X";
-                } else {
-                    type = "D";
-                }
-                value = chessMan.getValue() + "";
-            }
-            chessboard += chessboard + type + value + "_";
-        }
-        return chessboard;
     }
 
     public void drawChess(Canvas canvas) {

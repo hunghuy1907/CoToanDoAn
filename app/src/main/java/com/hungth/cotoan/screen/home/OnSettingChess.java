@@ -6,4 +6,10 @@ public interface OnSettingChess {
 
         void getcalculatorManVsMan(boolean isAdd, boolean isSub, boolean isMulti, boolean isDiv);
     }
+
+    interface OnManVsCom {
+        void getSettingManVsCom(String goFirst, String point, String time);
+
+        void getcalculatorManVsCom(boolean isAdd, boolean isSub, boolean isMulti, boolean isDiv);
+    }
 }

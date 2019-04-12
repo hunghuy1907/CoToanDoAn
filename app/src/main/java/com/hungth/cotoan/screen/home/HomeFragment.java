@@ -36,6 +36,7 @@ import com.hungth.cotoan.databinding.LayoutSettingMainBinding;
 import com.hungth.cotoan.databinding.LayoutSettingManVsComBinding;
 import com.hungth.cotoan.databinding.LayoutSettingManVsManBinding;
 import com.hungth.cotoan.screen.base.BaseFragment;
+import com.hungth.cotoan.screen.play_man_vs_com.PlayWithComputerFragment;
 import com.hungth.cotoan.screen.play_man_vs_man.PlayWithFriendFragment;
 import com.hungth.cotoan.utils.Constant;
 import com.hungth.cotoan.utils.common.FragmentTransactionUtils;
@@ -68,6 +69,7 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
     private Dialog dialogSettingHome;
     private boolean isFirst;
     private OnSettingChess.OnManVsMan onSetttingManVsMan;
+    private OnSettingChess.OnManVsCom onSetttingManVsCom;
     private boolean isAdd = true, isSub = true, isMulti = true, isDiv = true;
 
     public static HomeFragment getInstance() {
@@ -258,6 +260,15 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
         onSetttingManVsMan = PlayWithFriendFragment.getInstance();
         onSetttingManVsMan.getcalculatorManVsMan(isAdd, isSub, isMulti, isDiv);
         onSetttingManVsMan.getSettingManVsMan(goFirst, point, time);
+    }
+
+    private void getSettingWithCom() {
+        String goFirst = bindingSetting.textGoFirst.getText().toString();
+        String point = bindingSetting.textPoint.getText().toString();
+        String time = bindingSetting.textTime.getText().toString();
+        onSetttingManVsCom = PlayWithComputerFragment.getInstance();
+        onSetttingManVsCom.getcalculatorManVsCom(isAdd, isSub, isMulti, isDiv);
+        onSetttingManVsCom.getSettingManVsCom(goFirst, point, time);
     }
 
 
@@ -580,7 +591,14 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
 
     @Override
     public void agreeManVsCom() {
-
+        dialogSettingManVsCom.dismiss();
+        FragmentTransactionUtils.addFragment(getActivity().getSupportFragmentManager(),
+                PlayWithComputerFragment.getInstance(),
+                R.id.main_frame,
+                PlayWithComputerFragment.TAG,
+                true);
+        PlayWithComputerFragment.getInstance();
+        getSettingWithCom();
     }
 
     @Override
@@ -625,21 +643,5 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
     public void doneSetting() {
         dialogSettingHome.dismiss();
         initDialogSettingMain();
-    }
-
-
-    public void showDialogConfirmExit() {
-
-        new AlertDialog.Builder(getActivity())
-                .setTitle("Information")
-                .setMessage("Do you wish to exit from Menu Screen?")
-                .setPositiveButton("No", null)
-                .setNegativeButton("Yes",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int id) {
-
-                            }
-                        }).create().show();
     }
 }
