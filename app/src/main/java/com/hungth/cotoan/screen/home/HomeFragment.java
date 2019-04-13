@@ -162,6 +162,7 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
     public void saveInfor(String name, String view) {
         SharedPreferences.Editor editor = getActivity().getSharedPreferences(Constant.INFORMATION, MODE_PRIVATE).edit();
         editor.putString(Constant.NAME, name);
+        System.out.println("--->>>view: " + view);
         editor.putString(Constant.VIEW, view);
         editor.apply();
     }

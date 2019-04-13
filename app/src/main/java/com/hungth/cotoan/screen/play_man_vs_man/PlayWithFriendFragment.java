@@ -42,11 +42,13 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView, O
     private static PlayWithFriendFragment sInstance;
     private FragmentPlayWithFriendBinding mBinding;
     private PlayWithFriendViewModel mViewModel;
-    private static int left, right, top, bottom;
+    private int left, right, top, bottom;
     private DrawView drawView;
     private PopupMenu popupMenu;
     private String point, time, goFirst;
     private boolean isAdd, isSub, ismulti, isDiv;
+    private CountDownTimer countDownTimerBlue;
+    private CountDownTimer countDownTimeRed;
 
     public static PlayWithFriendFragment getInstance() {
         if (sInstance == null) {
@@ -87,6 +89,14 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView, O
         });
     }
 
+    public void setGoFirst() {
+        if (goFirst.equals("XANH")) {
+            drawView.setBlueMove(true);
+        } else {
+            drawView.setBlueMove(false);
+        }
+    }
+
     public void getInfor() {
         SharedPreferences prefs = getActivity().getSharedPreferences(Constant.INFORMATION, MODE_PRIVATE);
         String name = prefs.getString(Constant.NAME, "name");
@@ -96,11 +106,7 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView, O
         mBinding.progressBar1.setMax(Integer.valueOf(time)*1000);
         mBinding.progressBar2.setMax(Integer.valueOf(time)*1000);
 
-        if (goFirst.equals("XANH")) {
-            drawView.setBlueMove(true);
-        } else {
-            drawView.setBlueMove(false);
-        }
+        setGoFirst();
         setBackgroundIconCal();
         drawView.setAdd(isAdd);
         drawView.setSub(isSub);
@@ -114,6 +120,24 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView, O
         } else {
             Toast.makeText(getActivity(), "Đỏ đi trước", Toast.LENGTH_SHORT).show();
         }
+        countDown3s();
+    }
+
+    public void countDown3s() {
+        new CountDownTimer(2000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+            }
+
+            @Override
+            public void onFinish() {
+                if (drawView.isBlueMove()) {
+                    setValueProgressBar1();
+                } else {
+                    setValueProgressBar2();
+                }
+            }
+        }.start();
     }
 
     public void setBackgroundIconCal() {
@@ -142,18 +166,20 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView, O
         }
     }
 
-    private void observeChessmans(int left, int right, int top, int bottom) {
+    public List<ChessBoard> getChessBoardNew() {
         List<ChessMan> redChessmans = mViewModel.getChessManReds(left, right, top, bottom, Constant.RED_NUMBER);
         List<ChessMan> blueChessmans = mViewModel.getChessManBlues(left, right, top, bottom, Constant.BLUE_NUMBER);
-        List<ChessBoard> chessBoards = mViewModel.getChessBoards(left, right, top, bottom, true);
-
-        drawView.newBoard = mViewModel.getChessManInChessBoard(chessBoards, redChessmans, blueChessmans);
-        drawView.setChessBoardList(mViewModel.getChessManInChessBoard(chessBoards, redChessmans, blueChessmans));
+        List<ChessBoard> chessBoards =  mViewModel.getChessBoards(left, right, top, bottom, true);
+        return mViewModel.getChessManInChessBoard(chessBoards, redChessmans, blueChessmans);
     }
 
     @Override
     public void getLocation(int left, int right, int top, int bottom) {
-        observeChessmans(left, right, top, bottom);
+        this.left = left;
+        this.right = right;
+        this.bottom = bottom;
+        this.top = top;
+        drawView.setChessBoardList(getChessBoardNew());
     }
 
     @Override
@@ -171,9 +197,8 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView, O
                 .setPositiveButton("Có", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        drawView.newGame();
+                        newGame();
                     }
-
                 })
                 .setNegativeButton("Không", new DialogInterface.OnClickListener() {
                     @Override
@@ -193,48 +218,61 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView, O
 
     @Override
     public void sendTurn(boolean isBlueMove) {
-//        if (isBlueMove) {
-//            mBinding.progressBar1.setVisibility(View.INVISIBLE);
-//            mBinding.progressBar2.setVisibility(View.VISIBLE);
-//            setValueProgressBar1();
-//        } else {
-//            mBinding.progressBar1.setVisibility(View.VISIBLE);
-//            mBinding.progressBar2.setVisibility(View.INVISIBLE);
-//
-//            setValueProgressBar2();
-//        }
+        if (isBlueMove) {
+            mBinding.progressBar2.setVisibility(View.INVISIBLE);
+            setValueProgressBar1();
+        } else {
+            mBinding.progressBar1.setVisibility(View.INVISIBLE);
+            setValueProgressBar2();
+        }
     }
 
-    private void setValueProgressBar2() {
-        mBinding.progressBar2.setProgress(60000);
-        new CountDownTimer(Integer.valueOf(time) * 1000, 1000) {
+    private void setValueProgressBar1() {
+        if (countDownTimeRed != null) {
+            countDownTimeRed.cancel();
+        }
+        mBinding.progressBar1.setProgress(60000);
+        mBinding.progressBar1.setVisibility(View.VISIBLE);
+        countDownTimerBlue = new CountDownTimer(Integer.valueOf(time) * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 int current = mBinding.progressBar1.getProgress();
-                mBinding.progressBar2.setProgress(current - 100);
+                mBinding.progressBar1.setProgress(current - 1000);
             }
 
             @Override
             public void onFinish() {
-                mBinding.progressBar2.setVisibility(View.INVISIBLE);
+                Toast.makeText(getActivity(), "Mất lượt, đến lượt đỏ", Toast.LENGTH_SHORT).show();
+                mBinding.progressBar1.setVisibility(View.INVISIBLE);
+                setValueProgressBar2();
+                drawView.setBlueMove(false);
             }
-        }.start();
+        };
+        countDownTimerBlue.start();
     }
 
-    private void setValueProgressBar1() {
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                for (int i = 60; i >= 0; i--) {
-//                    mBinding.progressBar2.setProgress(i);
-//                    try {
-//                        Thread.sleep(1000);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                }
-//            }
-//        }).start();
+    private void setValueProgressBar2() {
+        if (countDownTimerBlue != null) {
+            countDownTimerBlue.cancel();
+        }
+        mBinding.progressBar2.setProgress(60000);
+        mBinding.progressBar2.setVisibility(View.VISIBLE);
+        countDownTimeRed = new CountDownTimer(Integer.valueOf(time) * 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                int current = mBinding.progressBar2.getProgress();
+                mBinding.progressBar2.setProgress(current - 1000);
+            }
+
+            @Override
+            public void onFinish() {
+                Toast.makeText(getActivity(), "Mất lượt, đến lượt xanh", Toast.LENGTH_SHORT).show();
+                mBinding.progressBar2.setVisibility(View.INVISIBLE);
+                setValueProgressBar1();
+                drawView.setBlueMove(true);
+            }
+        };
+        countDownTimeRed.start();
     }
 
     public void settotalPointAndProgressbar(int sum, int type) {
@@ -350,10 +388,10 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView, O
                 switch (item.getItemId()) {
                     case R.id.item_return:
                         Toast.makeText(getActivity(), "return", Toast.LENGTH_SHORT).show();
+                        drawView.back();
                         return true;
                     case R.id.item_new_game:
-                        initChess(PlayWithFriendFragment.this);
-                        drawView.newGame();
+                        newGame();
                         return true;
                     case R.id.item_guide:
                         Toast.makeText(getActivity(), "guide", Toast.LENGTH_SHORT).show();
@@ -362,6 +400,24 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView, O
                 return false;
             }
         });
+    }
+
+    public void newGame() {
+        new AlertDialog.Builder(getActivity())
+                .setIcon(android.R.drawable.ic_dialog_alert)
+                .setTitle("Thông báo")
+                .setMessage("Bạn có muốn chơi lại không")
+                .setCancelable(false)
+                .setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        drawView.setChessBoardList(getChessBoardNew());
+                        drawView.invalidate();
+                        setGoFirst();
+                    }
+                })
+                .setNegativeButton("Không",null)
+                .show();
     }
 
     @Override
