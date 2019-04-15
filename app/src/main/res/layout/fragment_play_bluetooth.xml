@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="com.hungth.cotoan.screen.play_man_vs_com.PlayWithComputerViewModel" />
+            type="com.hungth.cotoan.screen.play_bluetooth.PlayBluetoothViewModel" />
 
     </data>
 
@@ -70,8 +70,8 @@
             android:id="@+id/layoutAvatar"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:orientation="horizontal"
             android:layout_marginTop="16dp"
+            android:orientation="horizontal"
             app:layout_constraintHeight_percent="0.21"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageDivision">
@@ -247,7 +247,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:layout_marginLeft="16dp"
-                    android:text="MÁY"
+                    android:text="Tên"
                     android:textColor="@color/colorLight"
                     android:textSize="15sp"
                     android:textStyle="bold|italic"
@@ -409,7 +409,6 @@
             style="?android:attr/progressBarStyleHorizontal"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHeight_percent="0.015"
-            android:background="@color/colorLight"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageBoardChess" />
 

@@ -70,6 +70,7 @@
             android:id="@+id/layoutAvatar"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="16dp"
             android:orientation="horizontal"
             app:layout_constraintHeight_percent="0.21"
             app:layout_constraintStart_toStartOf="parent"

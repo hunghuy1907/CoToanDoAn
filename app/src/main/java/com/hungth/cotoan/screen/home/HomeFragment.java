@@ -1,6 +1,7 @@
 package com.hungth.cotoan.screen.home;
 
 import android.app.Dialog;
+import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,6 +9,7 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -31,11 +33,13 @@ import com.hungth.cotoan.data.model.CalculatorType;
 import com.hungth.cotoan.data.repository.ChessManRepository;
 import com.hungth.cotoan.data.resource.local.ChessmanLocalDataSource;
 import com.hungth.cotoan.databinding.FragmentHomeBinding;
+import com.hungth.cotoan.databinding.LayoutChooseDeveiceBluetoothBinding;
 import com.hungth.cotoan.databinding.LayoutPlayOnlineBinding;
 import com.hungth.cotoan.databinding.LayoutSettingMainBinding;
 import com.hungth.cotoan.databinding.LayoutSettingManVsComBinding;
 import com.hungth.cotoan.databinding.LayoutSettingManVsManBinding;
 import com.hungth.cotoan.screen.base.BaseFragment;
+import com.hungth.cotoan.screen.play_bluetooth.PlayWithBluetoothFragment;
 import com.hungth.cotoan.screen.play_man_vs_com.PlayWithComputerFragment;
 import com.hungth.cotoan.screen.play_man_vs_man.PlayWithFriendFragment;
 import com.hungth.cotoan.utils.Constant;
@@ -51,6 +55,8 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 public class HomeFragment extends BaseFragment implements PlayChess, SettingPlayChess {
     private static final String FIRST = "first";
+    private static final int INTENT_REQUEST_ENABLE = 1;
+    public static BluetoothAdapter bluetoothAdapter;
 
     public static String TAG = HomeFragment.class.getSimpleName();
     public static HomeFragment sInstance;
@@ -71,6 +77,7 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
     private OnSettingChess.OnManVsMan onSetttingManVsMan;
     private OnSettingChess.OnManVsCom onSetttingManVsCom;
     private boolean isAdd = true, isSub = true, isMulti = true, isDiv = true;
+    private boolean isPlayOnline;
 
     public static HomeFragment getInstance() {
         if (sInstance == null) {
@@ -136,6 +143,7 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
         initDialogSettingManVsCom();
         initDialogPlayOnline();
         initDialogSettingMain();
+        initBlustooth();
     }
 
     public void loginResult() {
@@ -258,7 +266,11 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
         String goFirst = bindingSetting.textGoFirst.getText().toString();
         String point = bindingSetting.textPoint.getText().toString();
         String time = bindingSetting.textTime.getText().toString();
-        onSetttingManVsMan = PlayWithFriendFragment.getInstance();
+        if (isPlayOnline) {
+            onSetttingManVsMan = PlayWithBluetoothFragment.getInstance();
+        } else {
+            onSetttingManVsMan = PlayWithFriendFragment.getInstance();
+        }
         onSetttingManVsMan.getcalculatorManVsMan(isAdd, isSub, isMulti, isDiv);
         onSetttingManVsMan.getSettingManVsMan(goFirst, point, time);
     }
@@ -277,6 +289,7 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
 
     @Override
     public void playOnline() {
+        isPlayOnline = true;
         dialogPlayOnlline.show();
     }
 
@@ -287,6 +300,7 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
 
     @Override
     public void playOneVsOne() {
+        isPlayOnline = false;
         dialogSettingManVsMan.show();
     }
 
@@ -426,12 +440,19 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
     @Override
     public void agreeManVsMan() {
         dialogSettingManVsMan.dismiss();
+        Fragment fragment;
+        String tag;
+        if (isPlayOnline) {
+            fragment = PlayWithBluetoothFragment.getInstance();
+            tag = PlayWithBluetoothFragment.TAG;
+        } else {
+            fragment = PlayWithFriendFragment.getInstance();
+            tag = PlayWithFriendFragment.TAG;
+        }
         FragmentTransactionUtils.addFragment(getActivity().getSupportFragmentManager(),
-                PlayWithFriendFragment.getInstance(),
-                R.id.main_frame,
-                PlayWithFriendFragment.TAG,
-                true);
+                fragment, R.id.main_frame, tag, true);
         PlayWithFriendFragment.getInstance();
+        PlayWithBluetoothFragment.getInstance();
         getSetting();
     }
 
@@ -608,6 +629,8 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
         initDialogPlayOnline();
     }
 
+    // play online/bluetooth
+
     @Override
     public void playMessenger() {
         sendLinkToInvitePlayOnline();
@@ -615,9 +638,22 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
 
     @Override
     public void playBlutooth() {
-
+        initBlustooth();
+        dialogPlayOnlline.dismiss();
+        dialogSettingManVsMan.show();
     }
 
+    public void initBlustooth() {
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        if (bluetoothAdapter == null) {
+            Toast.makeText(getActivity(), "Thiết bị không hỗ trợ Bluetooth", Toast.LENGTH_SHORT).show();
+        } else {
+            if (!bluetoothAdapter.isEnabled()) {
+                Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                getActivity().startActivityForResult(intent, INTENT_REQUEST_ENABLE);
+            }
+        }
+    }
 
     // setting home
 
