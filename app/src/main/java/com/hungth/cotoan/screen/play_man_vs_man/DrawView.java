@@ -44,6 +44,10 @@ public class DrawView extends View {
         this.chessBoardList = chessBoardList;
     }
 
+    public List<ChessBoard> getChessBoardList() {
+        return chessBoardList;
+    }
+
     public void setAdd(boolean add) {
         isAdd = add;
     }
@@ -150,12 +154,12 @@ public class DrawView extends View {
             int type = chessBoard.getChessMan().getmType();
             if (type == Constant.RED_NUMBER || type == Constant.RED_DOT) {
                 chessBoardRedAte.add(value);
-//                iGameView.sendValueEnermyAte(chessBoardRedAte, chessBoard.getChessMan().getmType(),
-//                        getTotalPointRed());
+                iGameView.sendValueEnermyAte(chessBoardRedAte, chessBoard.getChessMan().getmType(),
+                        getTotalPointRed());
             } else {
                 chessBoardBlueAte.add(value);
-//                iGameView.sendValueEnermyAte(chessBoardBlueAte, chessBoard.getChessMan().getmType(),
-//                        getTotalPointBlue());
+                iGameView.sendValueEnermyAte(chessBoardBlueAte, chessBoard.getChessMan().getmType(),
+                        getTotalPointBlue());
             }
             checkWin();
         }
@@ -681,5 +685,10 @@ public class DrawView extends View {
                 max = calculator.get(i);
         }
         return max;
+    }
+
+    public void setNewGame() {
+        stackBackRed.clear();
+        stackBackBlue.clear();
     }
 }

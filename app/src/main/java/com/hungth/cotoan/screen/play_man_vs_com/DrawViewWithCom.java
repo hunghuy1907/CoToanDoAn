@@ -59,6 +59,10 @@ public class DrawViewWithCom extends View implements OnMoveChess {
         this.chessBoardList = chessBoardList;
     }
 
+    public List<ChessBoard> getChessBoardList() {
+        return chessBoardList;
+    }
+
     public void setAdd(boolean add) {
         isAdd = add;
     }
@@ -256,7 +260,7 @@ public class DrawViewWithCom extends View implements OnMoveChess {
     }
 
     public void replace2Chessman(int numberNull, int numberChess) {
-//        addListAte(chessBoardList.get(numberNull));
+        addListAte(chessBoardList.get(numberNull));
         Bitmap bitmap = chessBoardList.get(numberChess).getChessMan().getmBitmap();
         int value = chessBoardList.get(numberChess).getChessMan().getValue();
         int type = chessBoardList.get(numberChess).getChessMan().getmType();
