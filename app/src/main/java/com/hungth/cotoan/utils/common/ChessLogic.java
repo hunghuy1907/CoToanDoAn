@@ -14,8 +14,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class ChessLogic {
-    public String convertChessboardToString(List<ChessBoard> chessBoardList) {
-        String chessboard = new String();
+    public static String convertChessboardToString(List<ChessBoard> chessBoardList) {
+        String chessboard = "";
         for (int i = 0; i < chessBoardList.size(); i++) {
             ChessMan chessMan = chessBoardList.get(i).getChessMan();
             String type;
@@ -31,12 +31,12 @@ public class ChessLogic {
                 }
                 value = chessMan.getValue() + "";
             }
-            chessboard += chessboard + type + value + "_";
+            chessboard = chessboard + type + value + "_";
         }
-        return chessboard;
+        return chessboard.substring(0, chessboard.length() - 1);
     }
 
-    public List<ChessBoard> convertStringToChessboard(Context context, String stringBoard, List<ChessBoard> chessBoards) {
+    public static List<ChessBoard> convertStringToChessboard(Context context, String stringBoard, List<ChessBoard> chessBoards) {
         List<String> strings = Arrays.asList(stringBoard.split("_"));
         for (int i = 0; i < strings.size(); i++) {
             ChessBoard chessBoard = chessBoards.get(i);
@@ -63,7 +63,17 @@ public class ChessLogic {
         return chessBoards;
     }
 
-    public Bitmap setBitmapBlue(Context context, int value) {
+    public static List<ChessBoard> revertListChessboard(List<ChessBoard> chessBoards) {
+        List<ChessBoard> boardRevert = new ArrayList<>();
+        for (int i = 10; i >= 0; i--) {
+            for (int j = 0; j < 9; j++) {
+                boardRevert.add(chessBoards.get(i * 9 + j));
+            }
+        }
+        return boardRevert;
+    }
+
+    public static Bitmap setBitmapBlue(Context context, int value) {
         switch (value) {
             case 0:
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.so_xanh_0);
@@ -90,7 +100,7 @@ public class ChessLogic {
         }
     }
 
-    public Bitmap setBitmapRed(Context context, int value) {
+    public static Bitmap setBitmapRed(Context context, int value) {
         switch (value) {
             case 0:
                 return BitmapFactory.decodeResource(context.getResources(), R.drawable.so_do_0);

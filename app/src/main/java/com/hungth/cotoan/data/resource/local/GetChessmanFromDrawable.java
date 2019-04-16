@@ -48,16 +48,19 @@ public class GetChessmanFromDrawable {
         for (int i = 0; i < CHESSMAN_BLUE_DOT.length; i++) {
             int leftChessman, rightChessman, topChessman, bottomChessman;
             Bitmap bitmap = null;
+            int value;
             if (i == 0) {
                 leftChessman = left + (right - left) / 9 * 4 + 8;
                 rightChessman = right - (right - left) / 9 * 4 - 8;
                 topChessman = top + (bottom - top) / 11 + 12;
                 bottomChessman = top + (bottom - top) / 11 * 2 - 6;
+                value = 0;
             } else {
                 leftChessman = left + (right - left) / 9 * (i - 1) + 8;
                 rightChessman = right - (right - left) / 9 * (9 - i) - 8;
                 topChessman = top + 8;
                 bottomChessman = top + (bottom - top) / 11 - 8;
+                value = 10 - i;
             }
 
             if (type == Constant.RED_DOT) {
@@ -68,7 +71,7 @@ public class GetChessmanFromDrawable {
             }
             chessManReds.add(
                     new ChessMan(leftChessman, rightChessman, topChessman, bottomChessman, bitmap,
-                            type, 10 - i));
+                            type, value));
         }
 
         return chessManReds;

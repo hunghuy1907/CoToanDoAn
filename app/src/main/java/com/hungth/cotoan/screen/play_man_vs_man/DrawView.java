@@ -150,12 +150,12 @@ public class DrawView extends View {
             int type = chessBoard.getChessMan().getmType();
             if (type == Constant.RED_NUMBER || type == Constant.RED_DOT) {
                 chessBoardRedAte.add(value);
-                iGameView.sendValueEnermyAte(chessBoardRedAte, chessBoard.getChessMan().getmType(),
-                        getTotalPointRed());
+//                iGameView.sendValueEnermyAte(chessBoardRedAte, chessBoard.getChessMan().getmType(),
+//                        getTotalPointRed());
             } else {
                 chessBoardBlueAte.add(value);
-                iGameView.sendValueEnermyAte(chessBoardBlueAte, chessBoard.getChessMan().getmType(),
-                        getTotalPointBlue());
+//                iGameView.sendValueEnermyAte(chessBoardBlueAte, chessBoard.getChessMan().getmType(),
+//                        getTotalPointBlue());
             }
             checkWin();
         }
