@@ -33,6 +33,7 @@ import com.hungth.cotoan.screen.home.OnSettingChess;
 import com.hungth.cotoan.utils.Constant;
 import com.hungth.cotoan.utils.common.FragmentTransactionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -179,7 +180,9 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView, O
         this.right = right;
         this.bottom = bottom;
         this.top = top;
-        drawView.setChessBoardList(getChessBoardNew());
+        if (drawView.getChessBoardList()== null) {
+            drawView.setChessBoardList(getChessBoardNew());
+        }
     }
 
     @Override
@@ -228,8 +231,8 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView, O
     }
 
     private void setValueProgressBar1() {
-        if (countDownTimeRed != null) {
-            countDownTimeRed.cancel();
+        if (countDownTimerBlue != null) {
+            countDownTimerBlue.cancel();
         }
         mBinding.progressBar1.setProgress(60000);
         mBinding.progressBar1.setVisibility(View.VISIBLE);
@@ -252,8 +255,8 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView, O
     }
 
     private void setValueProgressBar2() {
-        if (countDownTimerBlue != null) {
-            countDownTimerBlue.cancel();
+        if (countDownTimeRed != null) {
+            countDownTimeRed.cancel();
         }
         mBinding.progressBar2.setProgress(60000);
         mBinding.progressBar2.setVisibility(View.VISIBLE);
@@ -373,6 +376,30 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView, O
         }
     }
 
+    public void resetBackgroundRedEat() {
+        mBinding.imageEat0Man2.setBackgroundResource(R.drawable.ic_an_quan_false_1);
+        mBinding.imageEat1Man2.setBackgroundResource(R.drawable.ic_an_quan_false_2);
+        mBinding.imageEat2Man2.setBackgroundResource(R.drawable.ic_an_quan_false_3);
+        mBinding.imageEat3Man2.setBackgroundResource(R.drawable.ic_an_quan_false_4);
+        mBinding.imageEat4Man2.setBackgroundResource(R.drawable.ic_an_quan_false_5);
+        mBinding.imageEat5Man2.setBackgroundResource(R.drawable.ic_an_quan_false_6);
+        mBinding.imageEat6Man2.setBackgroundResource(R.drawable.ic_an_quan_false_7);
+        mBinding.imageEat7Man2.setBackgroundResource(R.drawable.ic_an_quan_false_8);
+        mBinding.imageEat8Man2.setBackgroundResource(R.drawable.ic_an_quan_false_9);
+    }
+
+    public void resetBackgroundBlueEat() {
+        mBinding.imageEat0Man1.setBackgroundResource(R.drawable.ic_an_quan_false_1);
+        mBinding.imageEat1Man1.setBackgroundResource(R.drawable.ic_an_quan_false_2);
+        mBinding.imageEat2Man1.setBackgroundResource(R.drawable.ic_an_quan_false_3);
+        mBinding.imageEat3Man1.setBackgroundResource(R.drawable.ic_an_quan_false_4);
+        mBinding.imageEat4Man1.setBackgroundResource(R.drawable.ic_an_quan_false_5);
+        mBinding.imageEat5Man1.setBackgroundResource(R.drawable.ic_an_quan_false_6);
+        mBinding.imageEat6Man1.setBackgroundResource(R.drawable.ic_an_quan_false_7);
+        mBinding.imageEat7Man1.setBackgroundResource(R.drawable.ic_an_quan_false_8);
+        mBinding.imageEat8Man1.setBackgroundResource(R.drawable.ic_an_quan_false_9);
+    }
+
     public void showPopup() {
         Context colorContext = new ContextThemeWrapper(getActivity(), R.style.PopupMenu);
         popupMenu = new PopupMenu(colorContext, mBinding.buttonMenu);
@@ -410,13 +437,30 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView, O
                 .setPositiveButton("Có", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        drawView.setChessBoardList(getChessBoardNew());
-                        drawView.invalidate();
-                        setGoFirst();
+                      clickButtonOkNewgame();
                     }
                 })
                 .setNegativeButton("Không",null)
                 .show();
+    }
+
+    public void clickButtonOkNewgame() {
+        drawView.setChessBoardList(getChessBoardNew());
+        drawView.setNewGame();
+        drawView.invalidate();
+        setGoFirst();
+        resetBackgroundBlueEat();
+        resetBackgroundRedEat();
+        if (drawView.isBlueMove()) {
+            Toast.makeText(getActivity(), "Xanh đi trước", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity(), "Đỏ đi trước", Toast.LENGTH_SHORT).show();
+        }
+        mBinding.progressBar1.setVisibility(View.INVISIBLE);
+        mBinding.progressBar2.setVisibility(View.INVISIBLE);
+        mBinding.textPoint.setText(("Điểm: 00/" + point));
+        mBinding.textPoint2.setText(("Điểm: 00/" + point));
+        countDown3s();
     }
 
     @Override

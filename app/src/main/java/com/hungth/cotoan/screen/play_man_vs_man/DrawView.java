@@ -44,6 +44,10 @@ public class DrawView extends View {
         this.chessBoardList = chessBoardList;
     }
 
+    public List<ChessBoard> getChessBoardList() {
+        return chessBoardList;
+    }
+
     public void setAdd(boolean add) {
         isAdd = add;
     }
@@ -681,5 +685,10 @@ public class DrawView extends View {
                 max = calculator.get(i);
         }
         return max;
+    }
+
+    public void setNewGame() {
+        stackBackRed.clear();
+        stackBackBlue.clear();
     }
 }

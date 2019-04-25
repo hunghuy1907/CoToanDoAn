@@ -148,7 +148,9 @@ public class PlayWithComputerFragment extends BaseFragment implements IGameViewW
         List<ChessBoard> chessBoards = mViewModel.getChessBoards(left, right, top, bottom, true);
 
         drawView.newBoard = mViewModel.getChessManInChessBoard(chessBoards, redChessmans, blueChessmans);
-        drawView.setChessBoardList(mViewModel.getChessManInChessBoard(chessBoards, redChessmans, blueChessmans));
+        if (drawView.getChessBoardList() == null) {
+            drawView.setChessBoardList(mViewModel.getChessManInChessBoard(chessBoards, redChessmans, blueChessmans));
+        }
     }
 
     @Override

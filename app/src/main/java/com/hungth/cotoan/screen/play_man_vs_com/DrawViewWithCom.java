@@ -5,25 +5,35 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.os.Handler;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.hungth.cotoan.R;
 import com.hungth.cotoan.data.model.ChessBoard;
 import com.hungth.cotoan.data.model.ChessMan;
+import com.hungth.cotoan.screen.ai.AIControler;
 import com.hungth.cotoan.utils.Constant;
+import com.hungth.cotoan.utils.common.ChessLogic;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DrawViewWithCom extends View {
+import static com.hungth.cotoan.screen.play_man_vs_com.DrawViewWithCom.*;
 
+public class DrawViewWithCom extends View implements OnMoveChess {
+
+    List<String> calculators = new ArrayList<>();
+
+    AIControler aiControler;
     public static List<ChessBoard> newBoard = new ArrayList<>();
     private List<ChessBoard> chessBoardList;
     private List<Integer> chessBoardRedAte = new ArrayList<>();
     private List<Integer> chessBoardBlueAte = new ArrayList<>();
     private ChessBoard chessBoardClick;
     private List<Integer> stackChessBoards = new ArrayList<>();
+    private List<Integer> stackBackRed = new ArrayList<>();
+    private List<Integer> stackBackBlue = new ArrayList<>();
     private int position;
     private boolean isBlueMove = true;
     private List<Integer> moves = new ArrayList<>();
@@ -33,14 +43,24 @@ public class DrawViewWithCom extends View {
     private boolean isAdd = true, isSub = true, isMulti = true, isDiv = true;
     private int time, point;
     private IGameViewWithCom iGameView;
+    private OnMoveChess onMoveChess;
+    private Canvas canvas;
 
     public DrawViewWithCom(Context context, IGameViewWithCom iGameView) {
         super(context);
         this.iGameView = iGameView;
+        onMoveChess = this;
+        calculators.add("cong");
+        calculators.add("tru");
+        aiControler = new AIControler(calculators, 2);
     }
 
     public void setChessBoardList(List<ChessBoard> chessBoardList) {
         this.chessBoardList = chessBoardList;
+    }
+
+    public List<ChessBoard> getChessBoardList() {
+        return chessBoardList;
     }
 
     public void setAdd(boolean add) {
@@ -115,10 +135,7 @@ public class DrawViewWithCom extends View {
                             return null;
                         }
                     } else {
-                        if (chessBoard.getChessMan().getmType() == Constant.BLUE_NUMBER ||
-                                chessBoard.getChessMan().getmType() == Constant.BLUE_DOT) {
-                            return null;
-                        }
+                        return null;
                     }
                     return chessBoard;
                 }
@@ -134,11 +151,32 @@ public class DrawViewWithCom extends View {
             int yClick = (int) event.getY();
             chessBoardClick = getChessmanClicked(xClick, yClick);
             if (isMove()) {
-                moveChessman();
+                int numberNull = stackChessBoards.get(stackChessBoards.size() - 1);
+                int numberChess = stackChessBoards.get(stackChessBoards.size() - 2);
+                moveChessman(numberNull, numberChess);
+                getListAI();
             }
+            invalidate();
+            return true;
         }
-        invalidate();
-        return true;
+        return false;
+    }
+
+    public void getListAI() {
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                List<ChessBoard> chessBoards = ChessLogic.revertListChessboard(chessBoardList);
+                String stringBoard = ChessLogic.convertChessboardToString(chessBoards);
+
+                int[] ints = aiControler.searchMove(stringBoard, "D", -1);
+                int numberChess = (10 - ints[1]) * 9 + ints[0];
+                int numberNull = (10 - ints[3]) * 9 + ints[2];
+                moves.add(numberChess);
+                moves.add(numberNull);
+                moveChessman(numberNull, numberChess);
+            }
+        });
     }
 
     public void addListAte(ChessBoard chessBoard) {
@@ -196,19 +234,20 @@ public class DrawViewWithCom extends View {
         }
     }
 
-    private void moveChessman() {
-        int numberNull = stackChessBoards.get(stackChessBoards.size() - 1);
-        int numberChess = stackChessBoards.get(stackChessBoards.size() - 2);
+    public void back() {
+        if (stackBackRed.size() > 0 && stackBackBlue.size() > 0) {
+            replace2Chessman(stackBackBlue.get(stackBackBlue.size() - 1), stackBackBlue.get(stackBackBlue.size() - 2));
+            replace2Chessman(stackBackRed.get(stackBackRed.size() - 1), stackBackRed.get(stackBackRed.size() - 2));
+            invalidate();
+        }
+        stackBackBlue.clear();
+        stackBackRed.clear();
+    }
+
+    private void moveChessman(int numberNull, int numberChess) {
         stackChessBoards.clear();
         if (moves.contains(numberNull) && chessBoardList.get(numberChess).getChessMan() != null) {
-            addListAte(chessBoardList.get(numberNull));
-            Bitmap bitmap = chessBoardList.get(numberChess).getChessMan().getmBitmap();
-            int value = chessBoardList.get(numberChess).getChessMan().getValue();
-            int type = chessBoardList.get(numberChess).getChessMan().getmType();
-            ChessBoard chessBoard = chessBoardList.get(numberNull);
-            ChessMan chessMan = getChessmanToMove(chessBoard, bitmap, type, value);
-            chessBoardList.get(numberNull).setChessMan(chessMan);
-            chessBoardList.get(numberChess).setChessMan(null);
+            replace2Chessman(numberNull, numberChess);
             if (isBlueMove) {
                 isBlueMove = false;
             } else {
@@ -217,6 +256,28 @@ public class DrawViewWithCom extends View {
             iGameView.sendTurn(isBlueMove);
             moves.clear();
             invalidate();
+        }
+    }
+
+    public void replace2Chessman(int numberNull, int numberChess) {
+        addListAte(chessBoardList.get(numberNull));
+        Bitmap bitmap = chessBoardList.get(numberChess).getChessMan().getmBitmap();
+        int value = chessBoardList.get(numberChess).getChessMan().getValue();
+        int type = chessBoardList.get(numberChess).getChessMan().getmType();
+        addBack(type, numberNull, numberChess);
+        ChessBoard chessBoard = chessBoardList.get(numberNull);
+        ChessMan chessMan = getChessmanToMove(chessBoard, bitmap, type, value);
+        chessBoardList.get(numberNull).setChessMan(chessMan);
+        chessBoardList.get(numberChess).setChessMan(null);
+    }
+
+    public void addBack(int type, int location1, int location2) {
+        if (type == Constant.RED_DOT || type == Constant.RED_NUMBER) {
+            stackBackRed.add(location1);
+            stackBackRed.add(location2);
+        } else {
+            stackBackBlue.add(location1);
+            stackBackBlue.add(location2);
         }
     }
 
@@ -661,5 +722,11 @@ public class DrawViewWithCom extends View {
         setChessBoardList(null);
         chessBoardList = newBoard;
         invalidate();
+    }
+
+    @Override
+    public void moveChess() {
+        invalidate();
+        getListAI();
     }
 }
