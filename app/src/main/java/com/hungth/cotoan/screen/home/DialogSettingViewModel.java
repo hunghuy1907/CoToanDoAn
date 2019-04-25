@@ -192,4 +192,8 @@ public class DialogSettingViewModel extends BaseViewModel {
     public void doneSetting() {
         settingPlayOnline.doneSetting();
     }
+
+    public void doneGuide() {
+        settingPlayOnline.doneGuide();
+    }
 }

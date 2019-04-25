@@ -2,7 +2,6 @@ package com.hungth.cotoan.screen.home;
 
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
@@ -10,8 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,7 +30,7 @@ import com.hungth.cotoan.data.model.CalculatorType;
 import com.hungth.cotoan.data.repository.ChessManRepository;
 import com.hungth.cotoan.data.resource.local.ChessmanLocalDataSource;
 import com.hungth.cotoan.databinding.FragmentHomeBinding;
-import com.hungth.cotoan.databinding.LayoutChooseDeveiceBluetoothBinding;
+import com.hungth.cotoan.databinding.LayoutGuideBinding;
 import com.hungth.cotoan.databinding.LayoutPlayOnlineBinding;
 import com.hungth.cotoan.databinding.LayoutSettingMainBinding;
 import com.hungth.cotoan.databinding.LayoutSettingManVsComBinding;
@@ -64,6 +61,7 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
     private LayoutSettingManVsManBinding bindingSetting;
     private LayoutSettingManVsComBinding manVsComBinding;
     private LayoutSettingMainBinding settingMainBinding;
+    private LayoutGuideBinding layoutGuideBinding;
     private LayoutPlayOnlineBinding onlineBinding;
     private HomeViewModel viewModel;
     private DialogSettingViewModel settingViewModel;
@@ -73,6 +71,7 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
     private Dialog dialogSettingManVsCom;
     private Dialog dialogPlayOnlline;
     private Dialog dialogSettingHome;
+    public static Dialog dialogGuide;
     private boolean isFirst;
     private OnSettingChess.OnManVsMan onSetttingManVsMan;
     private OnSettingChess.OnManVsCom onSetttingManVsCom;
@@ -144,6 +143,7 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
         initDialogPlayOnline();
         initDialogSettingMain();
         initBlustooth();
+        initDialogGuide();
     }
 
     public void loginResult() {
@@ -262,6 +262,20 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
         dialogSettingHome.getWindow().setLayout(width, height);
     }
 
+    private void initDialogGuide() {
+        if (dialogGuide == null) {
+            dialogGuide = new Dialog(getActivity());
+        }
+        layoutGuideBinding = DataBindingUtil.inflate(LayoutInflater.from(getActivity()),
+                R.layout.layout_guide, null, false);
+        dialogGuide.setContentView(layoutGuideBinding.getRoot());
+        layoutGuideBinding.setViewModel(settingViewModel);
+        int width = (int) (getResources().getDisplayMetrics().widthPixels * 0.95);
+        int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.9);
+
+        dialogGuide.getWindow().setLayout(width, height);
+    }
+
     private void getSetting() {
         String goFirst = bindingSetting.textGoFirst.getText().toString();
         String point = bindingSetting.textPoint.getText().toString();
@@ -311,7 +325,7 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
 
     @Override
     public void guide() {
-
+        dialogGuide.show();
     }
 
 
@@ -680,5 +694,10 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
     public void doneSetting() {
         dialogSettingHome.dismiss();
         initDialogSettingMain();
+    }
+
+    @Override
+    public void doneGuide() {
+        dialogGuide.dismiss();
     }
 }

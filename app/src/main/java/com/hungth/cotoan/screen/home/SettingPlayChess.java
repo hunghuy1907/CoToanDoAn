@@ -72,4 +72,8 @@ public interface SettingPlayChess {
 
     void doneSetting();
 
+    // setting guide
+
+    void doneGuide();
+
 }

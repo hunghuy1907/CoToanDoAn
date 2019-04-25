@@ -10,4 +10,24 @@
     <string name="guide_button">HƯỚNG DẪN</string>
     <string name="setting_button">CÀI ĐẶT</string>
     <string name="title_choose_bluetooth">CHỌN THIẾT BỊ KẾT NỐI</string>
+
+    <string name="title_cach_di_quan_1">Mỗi quân cờ di chuyển được trên HÀNG NGANG, CỘT DỌC,
+        ĐƯỜNG CHÉO khi không có quân cản trợ \n \n Số bước đi tối đa là số điểm của mỗi quân cờ </string>
+
+    <string name="title_cach_an_quan">Để tấn công quân đối phương.\n \n1. Di chuyển 2 quân cùng m
+    àu của người chơi tới ngay cạnh nhau. Vị trí tấn công nằm trên hàng, cột, đường chéo chứa
+    đồng thời 2 quân đó. \n \n 2. Thực hiện đủ các phép tính được quy định ban đầu giữa 2 giá trị của
+    2 quân cờ đó. Kết quả của mỗi phép tính sẽ cho ta 1 vị trí tấn công \n \n- VD \n 2 + 1 = 3, nghĩa
+    là quân 2 tấn công được quân địch cách quân 1 ba bước \n\n Lưu ý: \n Các phép tính được dùng phụ thuộc vào thỏa th
+    uận ban đầu giữa 2 người chơi. \n Chiều thực hiện phép tính là chiều tấn công. \n\n - VD \n Ch
+    iều thực hiện phép tính là 1 + 2 thì quân 1 nhảy qua quân 2 để ăn đối phương bên phía quân 2. \n
+    \n Chiều thực hiện phép tính là 2 + 1 thì quân 2 nhảy qua quân 1 để ăn đối phương bên phía quân 1.\n\n
+    - Kết quả lớn hơn 10 thì chỉ dùng phần đơn vị. \n\n VD: 7 + 9 = 16 thì chỉ lấy 6 để tính vị trí tấn c
+    ông. \n - Quân bé không thể trừ, chia quân lớn. \n\n - VD: \n 1 không trừ được 2 \n 2 không chia được 3</string>
+
+    <string name="title_luat_thang">Trong mọi chế độ, bên bàn ăn được quân 0 của đối phương trước, bên đó
+    THẮNG TUYỆT ĐỐI \n \n Nếu chơi chế độ cược điểm, bên nào đạt được số điểm cược đó trước bên đó
+    chiến thắng (ăn được quân nào sẽ được cộng một lượng điểm chính là giá trị của quân đó).</string>
+
+
 </resources>

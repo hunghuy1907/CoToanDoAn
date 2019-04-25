@@ -387,14 +387,13 @@ public class PlayWithFriendFragment extends BaseFragment implements IGameView, O
             public boolean onMenuItemClick(MenuItem item) {
                 switch (item.getItemId()) {
                     case R.id.item_return:
-                        Toast.makeText(getActivity(), "return", Toast.LENGTH_SHORT).show();
                         drawView.back();
                         return true;
                     case R.id.item_new_game:
                         newGame();
                         return true;
                     case R.id.item_guide:
-                        Toast.makeText(getActivity(), "guide", Toast.LENGTH_SHORT).show();
+                        HomeFragment.dialogGuide.show();
                         return true;
                 }
                 return false;

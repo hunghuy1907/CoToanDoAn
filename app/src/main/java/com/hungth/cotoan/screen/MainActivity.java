@@ -12,14 +12,11 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.hungth.cotoan.R;
 import com.hungth.cotoan.screen.home.HomeFragment;
-import com.hungth.cotoan.utils.Constant;
 import com.hungth.cotoan.utils.common.FragmentTransactionUtils;
 
 import java.security.MessageDigest;
