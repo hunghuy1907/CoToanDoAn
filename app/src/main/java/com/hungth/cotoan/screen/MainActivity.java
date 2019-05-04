@@ -1,6 +1,8 @@
 package com.hungth.cotoan.screen;
 
 import android.Manifest;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -14,6 +16,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.hungth.cotoan.R;
 import com.hungth.cotoan.screen.home.HomeFragment;
@@ -21,8 +24,10 @@ import com.hungth.cotoan.utils.common.FragmentTransactionUtils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override

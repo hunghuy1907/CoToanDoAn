@@ -2,13 +2,18 @@ package com.hungth.cotoan.screen.home;
 
 import android.app.Dialog;
 import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.content.ContentUris;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.databinding.DataBindingUtil;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +40,7 @@ import com.hungth.cotoan.databinding.LayoutPlayOnlineBinding;
 import com.hungth.cotoan.databinding.LayoutSettingMainBinding;
 import com.hungth.cotoan.databinding.LayoutSettingManVsComBinding;
 import com.hungth.cotoan.databinding.LayoutSettingManVsManBinding;
+import com.hungth.cotoan.screen.MainActivity;
 import com.hungth.cotoan.screen.base.BaseFragment;
 import com.hungth.cotoan.screen.play_bluetooth.PlayWithBluetoothFragment;
 import com.hungth.cotoan.screen.play_man_vs_com.PlayWithComputerFragment;
@@ -46,6 +52,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Arrays;
+import java.util.Set;
 
 import static android.content.Context.MODE_PRIVATE;
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -193,17 +200,8 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
     }
 
     public void sendLinkToInvitePlayOnline() {
-        Intent sendIntent = new Intent();
-        sendIntent.setAction(Intent.ACTION_SEND);
-        sendIntent.putExtra(Intent.EXTRA_TEXT, "My message to send");
-        sendIntent.setType("text/plain");
-        sendIntent.setPackage("com.facebook.orca");
-
-        try {
-            startActivity(sendIntent);
-        } catch (android.content.ActivityNotFoundException ex) {
-            Toast.makeText(getActivity(), "Please", Toast.LENGTH_SHORT).show();
-        }
+        getActivity().startActivity(new Intent(Intent.ACTION_VIEW,
+                Uri.parse("fb://messaging")));
     }
 
     private void initDialogSettingManVsMan() {
@@ -459,6 +457,7 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
         if (isPlayOnline) {
             fragment = PlayWithBluetoothFragment.getInstance();
             tag = PlayWithBluetoothFragment.TAG;
+            startActivity(new Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS));
         } else {
             fragment = PlayWithFriendFragment.getInstance();
             tag = PlayWithFriendFragment.TAG;
@@ -645,6 +644,37 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
 
     // play online/bluetooth
 
+    public String checkConnected() {
+        String name = null;
+        BluetoothAdapter bTAdapter = BluetoothAdapter.getDefaultAdapter();
+        Set<BluetoothDevice> pairedDevices = bTAdapter.getBondedDevices();
+        if (pairedDevices.size() > 0) {
+            for (BluetoothDevice device : pairedDevices) {
+                name = device.getName();
+            }
+        }
+        return name;
+    }
+
+    private void showDialogConfirmConnectBluetooth() {
+        if (checkConnected() != null) {
+            new AlertDialog.Builder(getActivity())
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .setTitle("Thông báo")
+                    .setMessage("Bạn đang kết nối với")
+                    .setCancelable(false)
+                    .setPositiveButton("Có", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                        }
+
+                    })
+                    .setNegativeButton("Không", null)
+                    .show();
+        }
+    }
+
     @Override
     public void playMessenger() {
         sendLinkToInvitePlayOnline();
@@ -652,9 +682,11 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
 
     @Override
     public void playBlutooth() {
-        initBlustooth();
-        dialogPlayOnlline.dismiss();
-        dialogSettingManVsMan.show();
+        if (checkConnected() != null) {
+            initBlustooth();
+            dialogPlayOnlline.dismiss();
+            dialogSettingManVsMan.show();
+        }
     }
 
     public void initBlustooth() {

@@ -48,6 +48,8 @@ public class PlayWithBluetoothFragment extends BaseFragment implements IGameView
         OnSettingChess.OnManVsMan, OnClickBluetooth, BluetoothAdapter.OnClickItemBluetooth {
     public static String TAG = PlayWithBluetoothFragment.class.getSimpleName();
     private static PlayWithBluetoothFragment sInstance;
+    public  boolean isRun;
+
     private FragmentPlayBluetoothBinding mBinding;
     private PlayBluetoothViewModel mViewModel;
     private int left, right, top, bottom;
@@ -94,9 +96,14 @@ public class PlayWithBluetoothFragment extends BaseFragment implements IGameView
         mViewModel = new PlayBluetoothViewModel(this, ChessManRepository.getInstance(ChessmanLocalDataSource.getInstance(getActivity())));
         mBinding.setViewModel(mViewModel);
         initChess(this);
-        getInfor();
-        initDialogBluetooth();
-        initDataForListBluetooth();
+        if (isRun) {
+            getInfor();
+        }
+//        initDialogBluetooth();
+//        initDataForListBluetooth();
+        IntentFilter intentFilter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        getActivity().registerReceiver(receiverBluetooth, intentFilter);
+
         dialogBlustooth.show();
     }
 
@@ -120,6 +127,19 @@ public class PlayWithBluetoothFragment extends BaseFragment implements IGameView
         int height = (int) (getResources().getDisplayMetrics().heightPixels * 0.5);
 
         dialogBlustooth.getWindow().setLayout(width, height);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        System.out.println("--->>>pause");
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        System.out.println("--->>>stop");
+        isRun = true;
     }
 
     public void initChess(final IGameViewBluetooth iGameViewBluetooth) {
