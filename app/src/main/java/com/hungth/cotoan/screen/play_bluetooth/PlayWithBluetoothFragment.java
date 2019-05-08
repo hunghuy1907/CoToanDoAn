@@ -54,6 +54,8 @@ public class PlayWithBluetoothFragment extends BaseFragment implements IGameView
         OnSettingChess.OnManVsMan, OnClickBluetooth {
     public static String TAG = PlayWithBluetoothFragment.class.getSimpleName();
     private static PlayWithBluetoothFragment sInstance;
+    public  boolean isRun;
+
     private FragmentPlayBluetoothBinding mBinding;
     private PlayBluetoothViewModel mViewModel;
     private int left, right, top, bottom;
@@ -212,6 +214,7 @@ public class PlayWithBluetoothFragment extends BaseFragment implements IGameView
     }
 
     public void initChess(final IGameViewBluetooth iGameView) {
+
         final ImageView imageView = mBinding.imageBoardChess;
         imageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             public void onGlobalLayout() {
