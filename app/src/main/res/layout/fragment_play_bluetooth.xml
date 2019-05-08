@@ -254,7 +254,7 @@
                     app:layout_constraintStart_toEndOf="@+id/imageAvatar_2"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <ImageView
+                <com.facebook.login.widget.ProfilePictureView
                     android:id="@+id/imageAvatar_2"
                     android:layout_width="40dp"
                     android:layout_height="50dp"

@@ -18,16 +18,13 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.view.ContextThemeWrapper;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.view.inputmethod.EditorInfo;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.hungth.cotoan.R;
@@ -46,6 +43,7 @@ import com.hungth.cotoan.utils.Constant;
 import com.hungth.cotoan.utils.common.ChessLogic;
 import com.hungth.cotoan.utils.common.FragmentTransactionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -54,17 +52,17 @@ public class PlayWithBluetoothFragment extends BaseFragment implements IGameView
         OnSettingChess.OnManVsMan, OnClickBluetooth {
     public static String TAG = PlayWithBluetoothFragment.class.getSimpleName();
     private static PlayWithBluetoothFragment sInstance;
-    public  boolean isRun;
 
     private FragmentPlayBluetoothBinding mBinding;
     private PlayBluetoothViewModel mViewModel;
     private int left, right, top, bottom;
     private DrawViewBluetooth drawViewBluetooth;
     private PopupMenu popupMenu;
-    private String point, time, goFirst;
+    private String point, time, name, view;
     private boolean isAdd, isSub, ismulti, isDiv;
     private CountDownTimer countDownTimerBlue;
     private CountDownTimer countDownTimeRed;
+    private String listAte;
 
     private static final int REQUEST_CONNECT_DEVICE_SECURE = 1;
     private static final int REQUEST_CONNECT_DEVICE_INSECURE = 2;
@@ -112,7 +110,6 @@ public class PlayWithBluetoothFragment extends BaseFragment implements IGameView
         if (!mBluetoothAdapter.isEnabled()) {
             Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
-            // Otherwise, setup the chat session
         } else if (mChatService == null) {
             mChatService = new BluetoothService(getActivity(), mHandler);
             mOutStringBuffer = new StringBuffer("");
@@ -133,52 +130,48 @@ public class PlayWithBluetoothFragment extends BaseFragment implements IGameView
         }
     }
 
-    private TextView.OnEditorActionListener mWriteListener
-            = new TextView.OnEditorActionListener() {
-        public boolean onEditorAction(TextView view, int actionId, KeyEvent event) {
-            // If the action is a key-up event on the return key, send the item_message
-            if (actionId == EditorInfo.IME_NULL && event.getAction() == KeyEvent.ACTION_UP) {
-                String message = view.getText().toString();
-                sendMessage(message);
-            }
-            return true;
-        }
-    };
-
-    private final Handler mHandler = new Handler() {
+    private final Handler mHandler = new Handler(new Handler.Callback() {
         @Override
-        public void handleMessage(Message msg) {
+        public boolean handleMessage(Message msg) {
             FragmentActivity activity = getActivity();
             switch (msg.what) {
                 case Constants.MESSAGE_STATE_CHANGE:
-                    break;
+                    return true;
                 case Constants.MESSAGE_WRITE:
                     byte[] writeBuf = (byte[]) msg.obj;
                     drawViewBluetooth.setMove(false);
-                    break;
+//                    Toast.makeText(getActivity(), )
+                    return true;
                 case Constants.MESSAGE_READ:
                     byte[] readBuf = (byte[]) msg.obj;
                     String readMessage = new String(readBuf, 0, msg.arg1);
-                    drawViewBluetooth.setChessBoardList(ChessLogic.convertStringToChessboard(getActivity(), readMessage, getChessBoardNew()));
+                    String chessboard = readMessage.substring(197);
+                    listAte = readMessage.substring(198);
+                    setBackgroundRedEat(convertStringToListInteger(listAte));
+                    drawViewBluetooth.setChessBoardList(ChessLogic.convertStringToChessboard(getActivity(), chessboard, getChessBoardNew()));
                     drawViewBluetooth.setMove(true);
                     drawViewBluetooth.invalidate();
-                    break;
+                    return true;
                 case Constants.MESSAGE_DEVICE_NAME:
                     mConnectedDeviceName = msg.getData().getString(Constants.DEVICE_NAME);
                     if (null != activity) {
                         Toast.makeText(activity, "Connected to "
                                 + mConnectedDeviceName, Toast.LENGTH_SHORT).show();
                     }
-                    break;
+                    return true;
                 case Constants.MESSAGE_TOAST:
                     if (null != activity) {
                         Toast.makeText(activity, msg.getData().getString(Constants.TOAST),
                                 Toast.LENGTH_SHORT).show();
                     }
-                    break;
+                    return true;
+
+                default:
+                    return false;
             }
+
         }
-    };
+    });
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -186,6 +179,7 @@ public class PlayWithBluetoothFragment extends BaseFragment implements IGameView
             case REQUEST_CONNECT_DEVICE_SECURE:
                 if (resultCode == Activity.RESULT_OK) {
                     connectDevice(data, true);
+                    sendMessage(name);
                 }
                 break;
             case REQUEST_CONNECT_DEVICE_INSECURE:
@@ -233,8 +227,8 @@ public class PlayWithBluetoothFragment extends BaseFragment implements IGameView
 
     public void getInfor() {
         SharedPreferences prefs = getActivity().getSharedPreferences(Constant.INFORMATION, MODE_PRIVATE);
-        String name = prefs.getString(Constant.NAME, "name");
-        String view = prefs.getString(Constant.VIEW, "view");
+        name = prefs.getString(Constant.NAME, "name");
+        view = prefs.getString(Constant.VIEW, "view");
         mBinding.imageAvatar1.setProfileId(view);
         mBinding.textName1.setText(name);
         mBinding.progressBar1.setMax(Integer.valueOf(time) * 1000);
@@ -380,7 +374,7 @@ public class PlayWithBluetoothFragment extends BaseFragment implements IGameView
 
             @Override
             public void onFinish() {
-                Toast.makeText(getActivity(), "Mất lượt, đến lượt đỏ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity().getApplication(), "Mất lượt, đến lượt đỏ", Toast.LENGTH_SHORT).show();
                 mBinding.progressBar1.setVisibility(View.INVISIBLE);
                 setValueProgressBar2();
             }
@@ -403,7 +397,7 @@ public class PlayWithBluetoothFragment extends BaseFragment implements IGameView
 
             @Override
             public void onFinish() {
-                Toast.makeText(getActivity(), "Mất lượt, đến lượt xanh", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity().getApplication(), "Mất lượt, đến lượt xanh", Toast.LENGTH_SHORT).show();
                 mBinding.progressBar2.setVisibility(View.INVISIBLE);
                 setValueProgressBar1();
             }
@@ -598,7 +592,6 @@ public class PlayWithBluetoothFragment extends BaseFragment implements IGameView
 
     @Override
     public void getSettingManVsMan(String goFirst, String point, String time) {
-        this.goFirst = goFirst;
         this.time = time;
         this.point = point;
     }
@@ -619,5 +612,13 @@ public class PlayWithBluetoothFragment extends BaseFragment implements IGameView
     @Override
     public void clickDone() {
 
+    }
+
+    public List<Integer> convertStringToListInteger(String listAte) {
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < listAte.length(); i++) {
+            list.add(Integer.valueOf(listAte.charAt(i) + ""));
+        }
+        return list;
     }
 }

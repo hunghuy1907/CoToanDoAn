@@ -212,7 +212,7 @@ public class DrawViewBluetooth extends View {
         stackChessBoards.clear();
         if (moves.contains(numberNull) && chessBoardList.get(numberChess).getChessMan() != null) {
             replace2Chessman(numberNull, numberChess);
-            iGameViewBluetooth.sendTurn(isBlueMove, ChessLogic.convertChessboardToStringBluetooth(chessBoardList));
+            iGameViewBluetooth.sendTurn(isBlueMove, ChessLogic.convertChessboardToStringBluetooth(chessBoardList) + getListBlueAte());
             moves.clear();
             invalidate();
         }
@@ -680,6 +680,14 @@ public class DrawViewBluetooth extends View {
     public void setNewGame() {
         stackBackRed.clear();
         stackBackBlue.clear();
+    }
+
+    public String getListBlueAte() {
+        String s = null;
+        for (int i = 0; i < chessBoardBlueAte.size(); i++) {
+            s += chessBoardBlueAte.get(i);
+        }
+        return s;
     }
 }
 

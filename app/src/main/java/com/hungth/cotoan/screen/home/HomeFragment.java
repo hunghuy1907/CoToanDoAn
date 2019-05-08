@@ -457,7 +457,6 @@ public class HomeFragment extends BaseFragment implements PlayChess, SettingPlay
         if (isPlayOnline) {
             fragment = PlayWithBluetoothFragment.getInstance();
             tag = PlayWithBluetoothFragment.TAG;
-            startActivity(new Intent(android.provider.Settings.ACTION_BLUETOOTH_SETTINGS));
         } else {
             fragment = PlayWithFriendFragment.getInstance();
             tag = PlayWithFriendFragment.TAG;
