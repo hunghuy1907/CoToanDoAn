@@ -12,6 +12,7 @@ import com.hungth.cotoan.R;
 import com.hungth.cotoan.data.model.ChessBoard;
 import com.hungth.cotoan.data.model.ChessMan;
 import com.hungth.cotoan.utils.Constant;
+import com.hungth.cotoan.utils.common.ChessLogic;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +28,7 @@ public class DrawViewBluetooth extends View {
     private List<Integer> stackBackBlue = new ArrayList<>();
     private int position;
     private boolean isBlueMove = true;
+    private boolean isMove = true;
     private List<Integer> moves = new ArrayList<>();
     private List<Integer> chessmanCanEats = new ArrayList<>();
     private Bitmap bitmap = BitmapFactory.decodeResource(getContext().getResources(),
@@ -44,6 +46,14 @@ public class DrawViewBluetooth extends View {
         this.chessBoardList = chessBoardList;
     }
 
+    public void setMove(boolean move) {
+        isMove = move;
+    }
+
+    public List<ChessBoard> getChessBoardList() {
+        return chessBoardList;
+    }
+
     public void setAdd(boolean add) {
         isAdd = add;
     }
@@ -58,10 +68,6 @@ public class DrawViewBluetooth extends View {
 
     public void setDiv(boolean div) {
         isDiv = div;
-    }
-
-    public void setBlueMove(boolean blueMove) {
-        isBlueMove = blueMove;
     }
 
     public boolean isBlueMove() {
@@ -108,18 +114,11 @@ public class DrawViewBluetooth extends View {
                 } else {
                     chessBoard.setClick(true);
                 }
-                if (chessBoard.getChessMan() != null) {
+                if (chessBoard.getChessMan() != null && isMove) {
                     position = i;
-                    if (isBlueMove) {
-                        if (chessBoard.getChessMan().getmType() == Constant.RED_NUMBER ||
-                                chessBoard.getChessMan().getmType() == Constant.RED_DOT) {
-                            return null;
-                        }
-                    } else {
-                        if (chessBoard.getChessMan().getmType() == Constant.BLUE_NUMBER ||
-                                chessBoard.getChessMan().getmType() == Constant.BLUE_DOT) {
-                            return null;
-                        }
+                    if (chessBoard.getChessMan().getmType() == Constant.RED_NUMBER ||
+                            chessBoard.getChessMan().getmType() == Constant.RED_DOT) {
+                        return null;
                     }
                     return chessBoard;
                 }
@@ -213,12 +212,7 @@ public class DrawViewBluetooth extends View {
         stackChessBoards.clear();
         if (moves.contains(numberNull) && chessBoardList.get(numberChess).getChessMan() != null) {
             replace2Chessman(numberNull, numberChess);
-            if (isBlueMove) {
-                isBlueMove = false;
-            } else {
-                isBlueMove = true;
-            }
-            iGameViewBluetooth.sendTurn(isBlueMove);
+            iGameViewBluetooth.sendTurn(isBlueMove, ChessLogic.convertChessboardToStringBluetooth(chessBoardList));
             moves.clear();
             invalidate();
         }
@@ -682,4 +676,11 @@ public class DrawViewBluetooth extends View {
         }
         return max;
     }
+
+    public void setNewGame() {
+        stackBackRed.clear();
+        stackBackBlue.clear();
+    }
 }
+
+

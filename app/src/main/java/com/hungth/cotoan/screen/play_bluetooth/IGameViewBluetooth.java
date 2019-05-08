@@ -11,6 +11,6 @@ public interface IGameViewBluetooth {
 
     void sendValueEnermyAte(List<Integer> values, int type, int sum);
 
-    void sendTurn(boolean isBlueMove);
+    void sendTurn(boolean isBlueMove, String chessboardString);
 
 }

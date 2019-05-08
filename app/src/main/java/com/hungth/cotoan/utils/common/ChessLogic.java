@@ -36,6 +36,28 @@ public class ChessLogic {
         return chessboard.substring(0, chessboard.length() - 1);
     }
 
+    public static String convertChessboardToStringBluetooth(List<ChessBoard> chessBoardList) {
+        String chessboard = "";
+        for (int i = chessBoardList.size() - 1; i >= 0; i--) {
+            ChessMan chessMan = chessBoardList.get(i).getChessMan();
+            String type;
+            String value;
+            if (chessMan == null) {
+                type = "0";
+                value = "0";
+            } else {
+                if (chessMan.getmType() == Constant.BLUE_NUMBER || chessMan.getmType() == Constant.BLUE_DOT) {
+                    type = "D";
+                } else {
+                    type = "X";
+                }
+                value = chessMan.getValue() + "";
+            }
+            chessboard = chessboard + type + value + "_";
+        }
+        return chessboard.substring(0, chessboard.length() - 1);
+    }
+
     public static List<ChessBoard> convertStringToChessboard(Context context, String stringBoard, List<ChessBoard> chessBoards) {
         List<String> strings = Arrays.asList(stringBoard.split("_"));
         for (int i = 0; i < strings.size(); i++) {
